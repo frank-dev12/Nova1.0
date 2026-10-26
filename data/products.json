@@ -1,0 +1,150 @@
+[
+  {
+    "id": "polo-essential",
+    "name": "Polo Essential",
+    "price": 89,
+    "category": "polos",
+    "badge": "Nuevo",
+    "colors": [
+      {"name": "Arena", "hex": "#E4D5C1"},
+      {"name": "Negro", "hex": "#1A1A1A"},
+      {"name": "Olivo", "hex": "#3E4A36"}
+    ],
+    "sizes": ["S", "M", "L", "XL"],
+    "image": "img/products/polo-essential.jpg",
+    "description": "Polo de algodón con caída limpia. La prenda que se usa sola o debajo de una casaca, de día o de noche.",
+    "details": ["Algodón peinado de uso diario", "Corte regular", "Cuello redondo que no se deforma"],
+    "featured": true,
+    "featured_order": 1,
+    "active": true,
+    "fit": "cover",
+    "position": "top"
+  },
+  {
+    "id": "polo-base",
+    "name": "Polo Base",
+    "price": 79,
+    "category": "polos",
+    "badge": "",
+    "colors": [
+      {"name": "Blanco", "hex": "#F3F3F3"},
+      {"name": "Negro", "hex": "#1A1A1A"},
+      {"name": "Gris", "hex": "#9AA0A6"}
+    ],
+    "sizes": ["S", "M", "L", "XL"],
+    "image": "img/products/polo-base.jpg",
+    "description": "El básico sin estampado. Tela fresca, hombro recto y un blanco que se mantiene con el lavado.",
+    "details": ["Jersey de algodón", "Sin estampado", "Ideal para armar capas"],
+    "featured": false,
+    "featured_order": 0,
+    "active": true,
+    "fit": "cover",
+    "position": "center"
+  },
+  {
+    "id": "casaca-orbit",
+    "name": "Casaca Orbit",
+    "price": 219,
+    "category": "casacas",
+    "badge": "",
+    "colors": [
+      {"name": "Negro", "hex": "#1A1A1A"},
+      {"name": "Humo", "hex": "#8A8F98"},
+      {"name": "Olivo", "hex": "#3E4A36"}
+    ],
+    "sizes": ["S", "M", "L", "XL"],
+    "image": "img/products/casaca-orbit.jpg",
+    "description": "Casaca ligera con cierre, pensada para el tránsito y las noches frescas. Cae sobre un polo sin abultar.",
+    "details": ["Cierre frontal", "Bolsillos laterales", "Corte ligeramente holgado"],
+    "featured": true,
+    "featured_order": 2,
+    "active": true,
+    "fit": "cover",
+    "position": "top"
+  },
+  {
+    "id": "casaca-norte",
+    "name": "Casaca Norte",
+    "price": 199,
+    "category": "casacas",
+    "badge": "",
+    "colors": [
+      {"name": "Terracota", "hex": "#C4785A"},
+      {"name": "Negro", "hex": "#1A1A1A"},
+      {"name": "Arena", "hex": "#E6DCC8"}
+    ],
+    "sizes": ["S", "M", "L", "XL"],
+    "image": "img/products/casaca-norte.jpg",
+    "description": "Bomber ligera, cierre completo y puños elásticos. El tono terracota rompe el neutro sin gritar.",
+    "details": ["Cierre metálico", "Puños y pretina elásticos", "Bolsillo en manga"],
+    "featured": false,
+    "featured_order": 0,
+    "active": true,
+    "fit": "contain",
+    "position": "center"
+  },
+  {
+    "id": "cargo-neo",
+    "name": "Cargo Neo",
+    "price": 149,
+    "category": "pantalones",
+    "badge": "",
+    "colors": [
+      {"name": "Índigo", "hex": "#6E8CA0"},
+      {"name": "Medio", "hex": "#4C6C8A"},
+      {"name": "Oscuro", "hex": "#24344A"}
+    ],
+    "sizes": ["28", "30", "32", "34", "36"],
+    "image": "img/products/cargo-neo.jpg",
+    "description": "Pantalón de denim con corte cómodo. Se mueve con libertad y combina con polo o hoodie.",
+    "details": ["Denim de uso diario", "Corte recto", "Tiro medio"],
+    "featured": true,
+    "featured_order": 3,
+    "active": true,
+    "fit": "contain",
+    "position": "center"
+  },
+  {
+    "id": "hoodie-cloud",
+    "name": "Hoodie Cloud",
+    "price": 169,
+    "category": "hoodies",
+    "badge": "",
+    "colors": [
+      {"name": "Arena", "hex": "#D8BBA4"},
+      {"name": "Negro", "hex": "#1A1A1A"},
+      {"name": "Piedra", "hex": "#8C857C"},
+      {"name": "Camel", "hex": "#C4A484"}
+    ],
+    "sizes": ["S", "M", "L", "XL"],
+    "image": "img/products/hoodie-cloud.jpg",
+    "description": "Hoodie suave, capucha amplia y un arena que combina con negro, olivo o denim.",
+    "details": ["Felpa por dentro", "Bolsillo canguro", "Capucha con cordón"],
+    "featured": true,
+    "featured_order": 4,
+    "active": true,
+    "fit": "cover",
+    "position": "top"
+  },
+  {
+    "id": "hoodie-core",
+    "name": "Hoodie Core",
+    "price": 159,
+    "category": "hoodies",
+    "badge": "",
+    "colors": [
+      {"name": "Mostaza", "hex": "#E0A100"},
+      {"name": "Negro", "hex": "#1A1A1A"},
+      {"name": "Arena", "hex": "#E6DCC8"}
+    ],
+    "sizes": ["S", "M", "L", "XL"],
+    "image": "img/products/hoodie-core.jpg",
+    "description": "El hoodie de todos los días, con hombro raglán y un mostaza que se ve de lejos.",
+    "details": ["Felpa media", "Corte relajado", "Puños ajustados"],
+    "featured": false,
+    "featured_order": 0,
+    "active": true,
+    "fit": "cover",
+    "position": "center"
+  }
+]

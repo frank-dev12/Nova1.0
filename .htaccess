@@ -1,0 +1,8 @@
+<IfModule mod_authz_core.c>
+    <FilesMatch "^(router\.php)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+RewriteEngine On
+RewriteRule ^(data|includes)(/|$) - [F,L]
