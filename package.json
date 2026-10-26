@@ -1,0 +1,25 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "Nova 1.0 es el pimer modelo de catalogo web para una tienda de ropa esta version 1.o sera trabajada en PHP Vanilla",
+  "private": true,
+  "scripts": {
+    "css": "tailwindcss -i ./assets/css/input.css -o ./assets/css/app.css --minify",
+    "test": "php tests/smoke.php"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frank-dev12/Nova1.0.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frank-dev12/Nova1.0/issues"
+  },
+  "homepage": "https://github.com/frank-dev12/Nova1.0#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

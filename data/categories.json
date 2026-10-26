@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "polos",
+    "name": "Polos",
+    "tagline": "Comodidad en todo momento.",
+    "image": "img/categories/polos.jpg",
+    "home": true
+  },
+  {
+    "slug": "casacas",
+    "name": "Casacas",
+    "tagline": "Estilo y protección para cada plan.",
+    "image": "img/categories/casacas.jpg",
+    "home": true
+  },
+  {
+    "slug": "pantalones",
+    "name": "Pantalones",
+    "tagline": "Diseñados para moverte libremente.",
+    "image": "img/categories/pantalones.jpg",
+    "home": true
+  },
+  {
+    "slug": "hoodies",
+    "name": "Hoodies",
+    "tagline": "Suaves, amplios y fáciles de combinar.",
+    "image": "img/products/hoodie-cloud.jpg",
+    "home": false
+  }
+]
