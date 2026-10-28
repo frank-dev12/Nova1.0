@@ -53,6 +53,16 @@ html.nova-alerts-ask .nova-alert-gate {
   place-items: center;
 }
 
+@media (max-width: 1023px) {
+  .admin-side {
+    display: none;
+  }
+
+  .admin-side.is-open {
+    display: block;
+  }
+}
+
 .nova-loader {
   position: fixed;
   inset: 0;

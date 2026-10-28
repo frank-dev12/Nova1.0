@@ -48,10 +48,19 @@ function admin_header(string $title, string $active): void
     <body class="min-h-screen bg-[linear-gradient(180deg,#eef6fb_0%,#f7fafc_40%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>" data-sw="<?= e(url('sw.js')) ?>" data-admin-alerts="<?= e(url('api/alerts.php')) ?>" data-orders-url="<?= e(url('admin/pedidos.php')) ?>">
         <?php render_alert_gate(); ?>
         <a data-alert-live href="<?= e(url('admin/pedidos.php')) ?>" class="fixed bottom-5 left-1/2 z-[70] hidden max-w-[90vw] -translate-x-1/2 truncate rounded-full bg-ink px-4 py-2.5 text-sm text-white shadow-lg"></a>
-        <div class="mx-auto grid min-h-screen max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[240px_1fr] lg:px-6">
-            <aside class="h-fit rounded-[24px] bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.5)]">
-                <a href="<?= e(url('admin/index.php')) ?>" class="block px-2 text-xl font-black tracking-[-0.06em]">NØVA</a>
-                <p class="px-2 pb-4 text-xs text-slate-400">Panel</p>
+        <div class="mx-auto grid min-h-screen w-full max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[240px_1fr] lg:px-6">
+            <div class="flex items-center gap-2 rounded-[22px] bg-white px-3 py-2 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.5)] lg:hidden">
+                <a href="<?= e(url('admin/index.php')) ?>" class="px-1 text-xl font-black tracking-[-0.06em]">NØVA</a>
+                <span class="min-w-0 truncate text-sm text-slate-500"><?= e($title) ?></span>
+                <button type="button" class="ml-auto grid h-10 w-10 shrink-0 place-items-center rounded-full text-ink hover:bg-slate-50" data-admin-menu-toggle aria-expanded="false" aria-controls="menu-panel">
+                    <span class="sr-only">Abrir menú del panel</span>
+                    <span data-admin-icon-open><?= icon('menu', 'h-5 w-5') ?></span>
+                    <span data-admin-icon-close class="hidden"><?= icon('x', 'h-5 w-5') ?></span>
+                </button>
+            </div>
+            <aside id="menu-panel" data-admin-menu class="admin-side h-fit rounded-[24px] bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.5)]">
+                <a href="<?= e(url('admin/index.php')) ?>" class="hidden px-2 text-xl font-black tracking-[-0.06em] lg:block">NØVA</a>
+                <p class="hidden px-2 pb-4 text-xs text-slate-400 lg:block">Panel</p>
                 <?php admin_nav(); ?>
                 <p data-alert-on class="mt-4 hidden rounded-2xl bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-500">El tono está activo. Deja esta pestaña abierta para oír los pedidos.</p>
                 <div data-alert-off class="mt-4 hidden rounded-2xl bg-orange-50 px-3 py-3 text-xs leading-relaxed text-slate-600">
@@ -67,7 +76,7 @@ function admin_header(string $title, string $active): void
                     </form>
                 </div>
             </aside>
-            <div class="flex flex-col gap-4">
+            <div class="flex min-w-0 flex-col gap-4">
                 <?php render_flashes(); ?>
     <?php
 }
@@ -77,6 +86,20 @@ function admin_footer(): void
     ?>
             </div>
         </div>
+        <script>
+            const adminMenuButton = document.querySelector('[data-admin-menu-toggle]');
+            const adminMenu = document.querySelector('[data-admin-menu]');
+            const adminIconOpen = document.querySelector('[data-admin-icon-open]');
+            const adminIconClose = document.querySelector('[data-admin-icon-close]');
+            if (adminMenuButton && adminMenu) {
+                adminMenuButton.addEventListener('click', () => {
+                    const open = adminMenu.classList.toggle('is-open');
+                    adminMenuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+                    adminIconOpen?.classList.toggle('hidden', open);
+                    adminIconClose?.classList.toggle('hidden', !open);
+                });
+            }
+        </script>
         <script src="<?= e(asset('js/alerts.js')) ?>" defer></script>
     </body>
     </html>
