@@ -8,6 +8,7 @@ function admin_nav(): void
     $items = [
         'resumen' => ['Resumen', url('admin/index.php'), 'layout-dashboard'],
         'productos' => ['Productos', url('admin/productos.php'), 'package'],
+        'pedidos' => ['Pedidos', url('admin/pedidos.php'), 'bell'],
         'mensajes' => ['Mensajes', url('admin/mensajes.php'), 'message-circle'],
     ];
     echo '<nav class="grid gap-1">';
@@ -18,6 +19,11 @@ function admin_nav(): void
         echo '<a class="' . $class . '" href="' . e($href) . '">' . icon($iconName, 'h-4 w-4') . '<span>' . e($label) . '</span>';
         if ($key === 'mensajes' && messages_unread_count() > 0) {
             echo '<span class="ml-auto rounded-full bg-nova px-2 py-0.5 text-[10px] font-bold text-white">' . e((string) messages_unread_count()) . '</span>';
+        }
+        if ($key === 'pedidos') {
+            $pending = orders_unread_count();
+            $hidden = $pending > 0 ? '' : ' hidden';
+            echo '<span data-order-badge class="ml-auto rounded-full bg-nova px-2 py-0.5 text-[10px] font-bold text-white' . $hidden . '">' . e((string) $pending) . '</span>';
         }
         echo '</a>';
     }
@@ -37,13 +43,22 @@ function admin_header(string $title, string $active): void
         <title><?= e($title) ?> · Panel NØVA</title>
         <link rel="icon" href="<?= e(asset('favicon.svg')) ?>" type="image/svg+xml">
         <link rel="stylesheet" href="<?= e(asset('css/app.css')) ?>">
+        <?php render_alert_head(); ?>
     </head>
-    <body class="min-h-screen bg-[linear-gradient(180deg,#eef6fb_0%,#f7fafc_40%,#e7f2fa_100%)] font-sans text-ink antialiased">
+    <body class="min-h-screen bg-[linear-gradient(180deg,#eef6fb_0%,#f7fafc_40%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>" data-sw="<?= e(url('sw.js')) ?>" data-admin-alerts="<?= e(url('api/alerts.php')) ?>" data-orders-url="<?= e(url('admin/pedidos.php')) ?>">
+        <?php render_alert_gate(); ?>
+        <a data-alert-live href="<?= e(url('admin/pedidos.php')) ?>" class="fixed bottom-5 left-1/2 z-[70] hidden max-w-[90vw] -translate-x-1/2 truncate rounded-full bg-ink px-4 py-2.5 text-sm text-white shadow-lg"></a>
         <div class="mx-auto grid min-h-screen max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[240px_1fr] lg:px-6">
             <aside class="h-fit rounded-[24px] bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.5)]">
                 <a href="<?= e(url('admin/index.php')) ?>" class="block px-2 text-xl font-black tracking-[-0.06em]">NØVA</a>
                 <p class="px-2 pb-4 text-xs text-slate-400">Panel</p>
                 <?php admin_nav(); ?>
+                <p data-alert-on class="mt-4 hidden rounded-2xl bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-500">El tono está activo. Deja esta pestaña abierta para oír los pedidos.</p>
+                <div data-alert-off class="mt-4 hidden rounded-2xl bg-orange-50 px-3 py-3 text-xs leading-relaxed text-slate-600">
+                    <p class="font-semibold text-ink">Alertas apagadas</p>
+                    <p class="mt-1">Sin permiso de notificaciones no suena el aviso de pedidos.</p>
+                    <button type="button" data-alert-retry class="mt-2 font-semibold text-nova">Activar</button>
+                </div>
                 <div class="mt-4 grid gap-1 border-t border-slate-100 pt-3">
                     <a href="<?= e(url('index.php')) ?>" class="flex items-center gap-2 rounded-2xl px-3 py-2 text-sm text-slate-600 hover:bg-slate-50"><?= icon('eye', 'h-4 w-4') ?> Ver tienda</a>
                     <form method="post" action="<?= e(url('admin/logout.php')) ?>">
@@ -62,6 +77,7 @@ function admin_footer(): void
     ?>
             </div>
         </div>
+        <script src="<?= e(asset('js/alerts.js')) ?>" defer></script>
     </body>
     </html>
     <?php

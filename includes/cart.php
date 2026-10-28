@@ -155,9 +155,15 @@ function cart_handle(array $post): array
     };
 }
 
-function cart_whatsapp_text(): string
+function cart_whatsapp_text(string $name = '', string $phone = ''): string
 {
     $parts = ['Hola NØVA, quiero hacer este pedido:'];
+    if ($name !== '') {
+        $parts[] = 'Nombre: ' . $name;
+    }
+    if ($phone !== '') {
+        $parts[] = 'Teléfono: ' . $phone;
+    }
     foreach (cart_lines() as $line) {
         if (!$line['available']) {
             continue;

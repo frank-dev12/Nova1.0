@@ -25,3 +25,4 @@ require_once __DIR__ . '/products.php';
 require_once __DIR__ . '/cart.php';
 require_once __DIR__ . '/messages.php';
 require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/orders.php';

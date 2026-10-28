@@ -6,6 +6,15 @@ require __DIR__ . '/includes/bootstrap.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
+    if ((string) ($_POST['action'] ?? '') === 'checkout') {
+        $result = order_place((string) ($_POST['name'] ?? ''), (string) ($_POST['phone'] ?? ''));
+        if (!$result['ok']) {
+            flash('error', $result['message']);
+            redirect('carrito.php');
+        }
+        header('Location: ' . $result['whatsapp'], true, 302);
+        exit;
+    }
     $result = cart_handle($_POST);
     flash($result['ok'] ? 'success' : 'error', $result['message']);
     $next = (string) ($_POST['redirect'] ?? '');
@@ -94,11 +103,24 @@ require __DIR__ . '/includes/header.php';
                     <span>Subtotal</span>
                     <span class="font-semibold"><?= e(money($total)) ?></span>
                 </div>
-                <p class="mt-3 text-xs leading-relaxed text-slate-500">El pedido se confirma por WhatsApp. Coordinamos talla, color y envío a todo el Perú. Aún no hay pago en línea.</p>
-                <a href="<?= e(whatsapp_link(cart_whatsapp_text())) ?>" target="_blank" rel="noopener noreferrer" class="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-nova text-sm font-semibold text-white transition hover:brightness-95">
-                    <?= icon_whatsapp('h-4 w-4') ?>
-                    Pedir por WhatsApp
-                </a>
+                <p class="mt-3 text-xs leading-relaxed text-slate-500">Al terminar, el pedido abre WhatsApp<?php if (!admin_logged_in()): ?> y avisa al panel con un tono<?php endif; ?>. Coordinamos talla, color y envío a todo el Perú. Aún no hay pago en línea.</p>
+                <?php if (admin_logged_in()): ?>
+                    <p class="mt-3 text-xs leading-relaxed text-slate-500">Estás como administrador: este pedido no genera alerta.</p>
+                <?php endif; ?>
+                <form method="post" action="<?= e(url('carrito.php')) ?>" class="mt-5 grid gap-3">
+                    <?= csrf_field() ?>
+                    <input type="hidden" name="action" value="checkout">
+                    <label class="block text-sm font-medium" for="pedido-nombre">Nombre
+                        <input id="pedido-nombre" name="name" required maxlength="80" autocomplete="name" class="mt-1 h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-slate-400">
+                    </label>
+                    <label class="block text-sm font-medium" for="pedido-telefono">Teléfono
+                        <input id="pedido-telefono" name="phone" type="tel" inputmode="tel" required maxlength="20" autocomplete="tel" placeholder="987 654 321" class="mt-1 h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-slate-400">
+                    </label>
+                    <button type="submit" class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-nova text-sm font-semibold text-white transition hover:brightness-95">
+                        <?= icon_whatsapp('h-4 w-4') ?>
+                        Terminar pedido
+                    </button>
+                </form>
                 <a href="<?= e(url('catalogo.php')) ?>" class="mt-3 inline-flex h-11 w-full items-center justify-center text-sm font-semibold text-slate-700">Seguir comprando</a>
             </aside>
         </div>

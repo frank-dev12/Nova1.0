@@ -48,13 +48,16 @@ Cada página pública es un archivo PHP en la raíz. Arranca cargando `includes/
 | `contacto.php` | Formulario |
 | `api/cart.php` | Alta y cambios del carrito, en JSON |
 | `api/search.php` | Sugerencias de búsqueda |
-| `admin/` | Login, resumen, productos y mensajes |
+| `api/alerts.php` | Pedidos sin leer, solo con sesión de administrador |
+| `admin/` | Login, resumen, productos, pedidos y mensajes |
 
 `includes/products.php` lee y escribe `data/products.json`. Las categorías están en `data/categories.json`. Los mensajes del contacto se guardan en `data/messages.php` para que, si alguien pide ese archivo por HTTP, PHP no lo imprima.
 
 El carrito no usa base de datos. Cada línea (producto, color y talla) se guarda en `$_SESSION`. El botón de agregar envía el formulario a `api/cart.php` con JavaScript. Si JavaScript no corre, el mismo formulario llega a `carrito.php` y la página se recarga.
 
 El logo NØVA, en la cabecera o en el pie, abre el inicio con un clic. Cuatro clics seguidos abren el panel. Al entrar a la tienda, la primera visita de la sesión muestra una pantalla de carga con la marca.
+
+Al abrir la tienda o el panel, el navegador pide permiso para las notificaciones de ese teléfono o computadora. La respuesta queda en la cookie `nova_alerts`. Si no se acepta, no hay tono. Si se acepta y el panel sigue abierto, un pedido terminado por alguien que no es administrador suena y aparece en Pedidos. El carrito pide nombre y teléfono, guarda el pedido en `data/orders.php` y abre WhatsApp. Un administrador que termina su propio carrito no dispara esa alerta.
 
 El panel exige sesión de administrador. La contraseña no está en texto plano: en `includes/config.php` hay un hash y el login lo comprueba con `password_verify`. Los formularios del panel, del carrito y del contacto llevan un token de sesión para no aceptar un envío de otra página.
 

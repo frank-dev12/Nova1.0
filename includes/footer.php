@@ -14,5 +14,6 @@
     </div>
     <div data-toast class="pointer-events-none fixed bottom-5 left-1/2 z-50 hidden -translate-x-1/2 rounded-full bg-ink px-4 py-2.5 text-sm text-white shadow-lg" role="status"></div>
     <script src="<?= e(asset('js/app.js')) ?>" defer></script>
+    <script src="<?= e(asset('js/alerts.js')) ?>" defer></script>
 </body>
 </html>

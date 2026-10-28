@@ -35,6 +35,24 @@ html.nova-skip-loader .nova-loader {
   display: none;
 }
 
+.nova-alert-gate {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  padding: 1rem;
+  background: rgba(20, 20, 20, 0.42);
+}
+
+html.nova-alerts-ask {
+  overflow: hidden;
+}
+
+html.nova-alerts-ask .nova-alert-gate {
+  display: grid;
+  place-items: center;
+}
+
 .nova-loader {
   position: fixed;
   inset: 0;

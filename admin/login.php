@@ -28,8 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Entrar · Panel NØVA</title>
     <link rel="icon" href="<?= e(asset('favicon.svg')) ?>" type="image/svg+xml">
     <link rel="stylesheet" href="<?= e(asset('css/app.css')) ?>">
+    <?php render_alert_head(); ?>
 </head>
-<body class="grid min-h-screen place-items-center bg-[radial-gradient(900px_400px_at_100%_0%,#d7ecf8,transparent_55%),linear-gradient(180deg,#eef6fb,#f7fafc)] px-4 font-sans text-ink">
+<body class="grid min-h-screen place-items-center bg-[radial-gradient(900px_400px_at_100%_0%,#d7ecf8,transparent_55%),linear-gradient(180deg,#eef6fb,#f7fafc)] px-4 font-sans text-ink" data-base="<?= e(base_path()) ?>" data-sw="<?= e(url('sw.js')) ?>">
+    <?php render_alert_gate(); ?>
     <form method="post" class="w-full max-w-sm rounded-[28px] bg-white p-6 shadow-[0_20px_50px_-32px_rgba(15,23,42,0.6)] sm:p-8">
         <?= csrf_field() ?>
         <a href="<?= e(url('index.php')) ?>" class="text-2xl font-black tracking-[-0.06em]">NØVA</a>
@@ -48,5 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </label>
         <button type="submit" class="mt-5 h-11 w-full rounded-full bg-nova text-sm font-semibold text-white">Entrar</button>
     </form>
+    <script src="<?= e(asset('js/alerts.js')) ?>" defer></script>
 </body>
 </html>

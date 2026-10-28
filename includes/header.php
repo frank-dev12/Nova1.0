@@ -26,8 +26,10 @@ $searchQuery = $searchQuery ?? '';
             }
         } catch (error) {}
     </script>
+    <?php render_alert_head(); ?>
 </head>
-<body class="min-h-screen bg-[radial-gradient(1100px_420px_at_8%_-10%,#ffffff,transparent_60%),radial-gradient(900px_500px_at_100%_0%,#d7ecf8,transparent_55%),linear-gradient(180deg,#eef6fb_0%,#f5f8fb_42%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>" data-admin="<?= e(url('admin/login.php')) ?>">
+<body class="min-h-screen bg-[radial-gradient(1100px_420px_at_8%_-10%,#ffffff,transparent_60%),radial-gradient(900px_500px_at_100%_0%,#d7ecf8,transparent_55%),linear-gradient(180deg,#eef6fb_0%,#f5f8fb_42%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>" data-admin="<?= e(url('admin/login.php')) ?>" data-sw="<?= e(url('sw.js')) ?>">
+    <?php render_alert_gate(); ?>
     <div class="nova-loader" data-loader role="status" aria-live="polite" aria-label="Cargando NØVA">
         <div class="nova-loader-card">
             <p class="nova-loader-mark">NØVA</p>

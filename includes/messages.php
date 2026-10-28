@@ -12,6 +12,9 @@ function &messages_bucket(): array
     static $items = null;
     if ($items === null) {
         $path = messages_path();
+        if (is_file($path) && function_exists('opcache_invalidate')) {
+            opcache_invalidate($path, true);
+        }
         $loaded = is_file($path) ? require $path : [];
         $items = is_array($loaded) ? array_values($loaded) : [];
     }
@@ -24,6 +27,9 @@ function messages_save(): void
     $items = messages_bucket();
     $content = "<?php\n\ndeclare(strict_types=1);\n\nreturn " . var_export(array_values($items), true) . ";\n";
     file_put_contents(messages_path(), $content, LOCK_EX);
+    if (function_exists('opcache_invalidate')) {
+        opcache_invalidate(messages_path(), true);
+    }
 }
 
 function messages_all(): array
