@@ -60,8 +60,16 @@ function admin_header(string $title, string $active): void
                 </button>
             </div>
             <aside id="menu-panel" data-admin-menu class="admin-side h-fit rounded-[24px] bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.5)]">
-                <a href="<?= e(url('admin/index.php')) ?>" class="block px-2 text-xl font-black tracking-[-0.06em]">NØVA</a>
-                <p class="px-2 pb-4 text-xs text-slate-400">Panel</p>
+                <div class="flex items-start justify-between">
+                    <div>
+                        <a href="<?= e(url('admin/index.php')) ?>" class="block px-2 text-xl font-black tracking-[-0.06em]">NØVA</a>
+                        <p class="px-2 pb-4 text-xs text-slate-400">Panel</p>
+                    </div>
+                    <button type="button" class="grid h-9 w-9 place-items-center rounded-full text-ink hover:bg-slate-50 lg:hidden" data-admin-menu-close>
+                        <span class="sr-only">Cerrar menú</span>
+                        <?= icon('x', 'h-5 w-5') ?>
+                    </button>
+                </div>
                 <?php admin_nav(); ?>
                 <p data-alert-on class="mt-4 hidden rounded-2xl bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-500">El tono está activo. Deja esta pestaña abierta para oír los pedidos.</p>
                 <div data-alert-off class="mt-4 hidden rounded-2xl bg-orange-50 px-3 py-3 text-xs leading-relaxed text-slate-600">
@@ -107,6 +115,7 @@ function admin_footer(): void
                     setAdminMenu(!adminMenu.classList.contains('is-open'));
                 });
                 adminBackdrop?.addEventListener('click', () => setAdminMenu(false));
+                document.querySelector('[data-admin-menu-close]')?.addEventListener('click', () => setAdminMenu(false));
                 document.addEventListener('keydown', (event) => {
                     if (event.key === 'Escape') setAdminMenu(false);
                 });
