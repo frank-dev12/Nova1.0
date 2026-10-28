@@ -53,14 +53,52 @@ html.nova-alerts-ask .nova-alert-gate {
   place-items: center;
 }
 
+.admin-backdrop {
+  display: none;
+}
+
 @media (max-width: 1023px) {
+  .admin-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: block;
+    border: 0;
+    background: rgba(20, 20, 20, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 280ms ease;
+  }
+
+  .admin-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .admin-side {
-    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    width: min(18rem, 86vw);
+    height: 100%;
+    overflow: auto;
+    border-radius: 0;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 280ms ease, visibility 0s linear 280ms;
   }
 
   .admin-side.is-open {
-    display: block;
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 280ms ease, visibility 0s linear 0s;
   }
+}
+
+html.admin-menu-open {
+  overflow: hidden;
 }
 
 .nova-loader {
@@ -173,7 +211,9 @@ html.nova-alerts-ask .nova-alert-gate {
   .carousel.is-ready > .hero-slide,
   .nova-loader-mark,
   .nova-loader-bar,
-  .nova-loader {
+  .nova-loader,
+  .admin-side,
+  .admin-backdrop {
     transition: none !important;
     animation: none !important;
   }
