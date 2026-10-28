@@ -1,5 +1,53 @@
 (() => {
     const base = document.body?.dataset.base || '';
+    const loader = document.querySelector('[data-loader]');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (loader) {
+        const skip = reduceMotion || sessionStorage.getItem('nova.entered') === '1';
+        if (skip) {
+            loader.remove();
+            sessionStorage.setItem('nova.entered', '1');
+        } else {
+            const started = performance.now();
+            let closed = false;
+            const closeLoader = () => {
+                if (closed) return;
+                closed = true;
+                loader.classList.add('is-done');
+                sessionStorage.setItem('nova.entered', '1');
+                window.setTimeout(() => loader.remove(), 460);
+            };
+            const arm = () => {
+                const wait = Math.max(0, 900 - (performance.now() - started));
+                window.setTimeout(closeLoader, wait);
+            };
+            if (document.readyState === 'complete') arm();
+            else window.addEventListener('load', arm);
+            window.setTimeout(closeLoader, 2600);
+        }
+    }
+
+    document.querySelectorAll('[data-logo]').forEach((logo) => {
+        let clicks = 0;
+        let timer = 0;
+        logo.addEventListener('click', (event) => {
+            event.preventDefault();
+            clicks += 1;
+            logo.classList.remove('is-tapped');
+            void logo.offsetWidth;
+            logo.classList.add('is-tapped');
+            window.clearTimeout(timer);
+            if (clicks >= 4) {
+                window.location.href = document.body.dataset.admin || `${base}/admin/login.php`;
+                return;
+            }
+            timer = window.setTimeout(() => {
+                if (clicks === 1) window.location.href = logo.getAttribute('href');
+                clicks = 0;
+            }, 550);
+        });
+    });
     const toast = document.querySelector('[data-toast]');
 
     function showToast(message) {

@@ -1,7 +1,7 @@
         </main>
         <footer class="mt-6 flex flex-col gap-4 px-1 py-6 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
             <div class="flex flex-wrap items-center gap-4 sm:gap-6">
-                <a href="<?= e(url('index.php')) ?>" class="text-lg font-black tracking-[-0.06em] text-ink">NØVA</a>
+                <a href="<?= e(url('index.php')) ?>" data-logo class="text-lg font-black tracking-[-0.06em] text-ink">NØVA</a>
                 <span class="hidden h-4 w-px bg-slate-300 sm:block"></span>
                 <nav class="flex gap-4" aria-label="Pie">
                     <a href="<?= e(url('index.php')) ?>" class="hover:text-ink">Inicio</a>
