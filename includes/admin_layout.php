@@ -5,27 +5,53 @@ declare(strict_types=1);
 function admin_nav(): void
 {
     $active = $GLOBALS['adminActive'] ?? '';
-    $items = [
-        'resumen' => ['Resumen', url('admin/index.php'), 'layout-dashboard'],
-        'productos' => ['Productos', url('admin/productos.php'), 'package'],
-        'pedidos' => ['Pedidos', url('admin/pedidos.php'), 'bell'],
-        'mensajes' => ['Mensajes', url('admin/mensajes.php'), 'message-circle'],
+    $groups = [
+        'General' => [
+            'resumen' => ['Resumen', url('admin/index.php'), 'layout-dashboard'],
+            'pedidos' => ['Pedidos', url('admin/pedidos.php'), 'shopping-bag'],
+            'mensajes' => ['Mensajes', url('admin/mensajes.php'), 'message-circle'],
+        ],
+        'Catálogo' => [
+            'productos' => ['Productos', url('admin/productos.php'), 'package'],
+            'categorias' => ['Categorías', url('admin/categorias.php'), 'grid-2x2'],
+            'tallas' => ['Tallas', url('admin/tallas.php'), 'ruler'],
+            'colores' => ['Colores', url('admin/colores.php'), 'palette'],
+            'colecciones' => ['Colecciones', url('admin/colecciones.php'), 'layers'],
+        ],
+        'Gestión' => [
+            'inventario' => ['Inventario', url('admin/inventario.php'), 'boxes'],
+            'promociones' => ['Promociones', url('admin/promociones.php'), 'percent'],
+        ],
+        'Sistema' => [
+            'configuracion' => ['Configuración', url('admin/configuracion.php'), 'settings'],
+            'tienda' => ['Ver tienda', url('index.php'), 'eye'],
+        ],
     ];
-    echo '<nav class="grid gap-1">';
-    foreach ($items as $key => [$label, $href, $iconName]) {
-        $class = $active === $key
-            ? 'flex items-center gap-2 rounded-2xl bg-ink px-3 py-2.5 text-sm font-semibold text-white'
-            : 'flex items-center gap-2 rounded-2xl px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50';
-        echo '<a class="' . $class . '" href="' . e($href) . '">' . icon($iconName, 'h-4 w-4') . '<span>' . e($label) . '</span>';
-        if ($key === 'mensajes' && messages_unread_count() > 0) {
-            echo '<span class="ml-auto rounded-full bg-nova px-2 py-0.5 text-[10px] font-bold text-white">' . e((string) messages_unread_count()) . '</span>';
+
+    echo '<nav class="grid">';
+    foreach ($groups as $group => $items) {
+        echo '<p class="px-3 pb-1 pt-5 text-[11px] font-medium uppercase tracking-[0.16em] text-white/40">' . e($group) . '</p>';
+        echo '<div class="grid gap-0.5">';
+        foreach ($items as $key => [$label, $href, $iconName]) {
+            $isActive = $active === $key;
+            $class = $isActive
+                ? 'flex items-center gap-3 rounded-full bg-white/10 px-3 py-2.5 text-sm font-medium text-white'
+                : 'flex items-center gap-3 rounded-full px-3 py-2.5 text-sm text-white/75 hover:bg-white/5 hover:text-white';
+            echo '<a class="' . $class . '" href="' . e($href) . '">' . icon($iconName, 'h-4 w-4 shrink-0') . '<span>' . e($label) . '</span><span class="ml-auto flex items-center gap-2">';
+            if ($key === 'mensajes' && messages_unread_count() > 0) {
+                echo '<span class="rounded-full bg-emerald-400/15 px-2 py-0.5 text-[10px] font-bold text-emerald-300">' . e((string) messages_unread_count()) . '</span>';
+            }
+            if ($key === 'pedidos') {
+                $pending = orders_unread_count();
+                $hidden = $pending > 0 ? '' : ' hidden';
+                echo '<span data-order-badge class="rounded-full bg-emerald-400/15 px-2 py-0.5 text-[10px] font-bold text-emerald-300' . $hidden . '">' . e((string) $pending) . '</span>';
+            }
+            if ($isActive) {
+                echo icon('chevron-right', 'h-4 w-4 text-white/50');
+            }
+            echo '</span></a>';
         }
-        if ($key === 'pedidos') {
-            $pending = orders_unread_count();
-            $hidden = $pending > 0 ? '' : ' hidden';
-            echo '<span data-order-badge class="ml-auto rounded-full bg-nova px-2 py-0.5 text-[10px] font-bold text-white' . $hidden . '">' . e((string) $pending) . '</span>';
-        }
-        echo '</a>';
+        echo '</div>';
     }
     echo '</nav>';
 }
@@ -49,43 +75,48 @@ function admin_header(string $title, string $active): void
         <?php render_alert_gate(); ?>
         <a data-alert-live href="<?= e(url('admin/pedidos.php')) ?>" class="fixed bottom-5 left-1/2 z-[70] hidden max-w-[90vw] -translate-x-1/2 truncate rounded-full bg-ink px-4 py-2.5 text-sm text-white shadow-lg"></a>
         <button type="button" class="admin-backdrop" data-admin-backdrop aria-label="Cerrar menú"></button>
-        <div class="mx-auto grid min-h-screen w-full max-w-6xl content-start gap-4 px-4 py-4 lg:grid-cols-[240px_1fr] lg:px-6">
-            <div class="flex h-14 items-center gap-2 self-start rounded-2xl bg-white px-3 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.5)] lg:hidden">
+        <div class="lg:grid lg:min-h-screen lg:grid-cols-[340px_1fr]">
+            <div class="mx-4 mt-4 flex h-14 items-center gap-2 self-start rounded-2xl bg-[#2a2a2a] px-3 text-white lg:hidden">
                 <a href="<?= e(url('admin/index.php')) ?>" class="px-1 text-lg font-black tracking-[-0.06em]">NØVA</a>
-                <span class="min-w-0 truncate text-sm text-slate-500"><?= e($title) ?></span>
-                <button type="button" class="ml-auto grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink hover:bg-slate-50" data-admin-menu-toggle aria-expanded="false" aria-controls="menu-panel">
+                <span class="min-w-0 truncate text-sm text-white/60"><?= e($title) ?></span>
+                <button type="button" class="ml-auto grid h-9 w-9 shrink-0 place-items-center rounded-full text-white hover:bg-white/10" data-admin-menu-toggle aria-expanded="false" aria-controls="menu-panel">
                     <span class="sr-only">Abrir menú del panel</span>
                     <span data-admin-icon-open><?= icon('menu', 'h-5 w-5') ?></span>
                     <span data-admin-icon-close class="hidden"><?= icon('x', 'h-5 w-5') ?></span>
                 </button>
             </div>
-            <aside id="menu-panel" data-admin-menu class="admin-side h-fit rounded-[24px] bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.5)]">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <a href="<?= e(url('admin/index.php')) ?>" class="block px-2 text-xl font-black tracking-[-0.06em]">NØVA</a>
-                        <p class="px-2 pb-4 text-xs text-slate-400">Panel</p>
+            <aside id="menu-panel" data-admin-menu class="admin-side flex h-full flex-col overflow-hidden bg-[#2a2a2a] text-white lg:sticky lg:top-0 lg:h-screen">
+                <div class="flex shrink-0 items-start gap-3 p-4 pb-3 lg:p-5 lg:pb-4">
+                    <a href="<?= e(url('admin/index.php')) ?>" class="grid h-11 shrink-0 place-items-center rounded-2xl bg-black px-3 text-sm font-black tracking-tight">NØVA.</a>
+                    <div class="min-w-0 flex-1 pt-0.5">
+                        <div class="flex items-start justify-between gap-2">
+                            <p class="text-sm font-semibold leading-tight">Panel administrativo</p>
+                            <span class="shrink-0 rounded-full border border-emerald-400/70 px-2 py-0.5 text-[11px] font-medium text-emerald-400">Admin</span>
+                        </div>
+                        <p class="text-xs text-white/50">Gestión de tienda</p>
                     </div>
-                    <button type="button" class="grid h-9 w-9 place-items-center rounded-full text-ink hover:bg-slate-50 lg:hidden" data-admin-menu-close>
+                    <button type="button" class="grid h-9 w-9 shrink-0 place-items-center rounded-full text-white hover:bg-white/10 lg:hidden" data-admin-menu-close>
                         <span class="sr-only">Cerrar menú</span>
                         <?= icon('x', 'h-5 w-5') ?>
                     </button>
                 </div>
-                <?php admin_nav(); ?>
-                <p data-alert-on class="mt-4 hidden rounded-2xl bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-500">El tono está activo. Deja esta pestaña abierta para oír los pedidos.</p>
-                <div data-alert-off class="mt-4 hidden rounded-2xl bg-orange-50 px-3 py-3 text-xs leading-relaxed text-slate-600">
-                    <p class="font-semibold text-ink">Alertas apagadas</p>
-                    <p class="mt-1">Sin permiso de notificaciones no suena el aviso de pedidos.</p>
-                    <button type="button" data-alert-retry class="mt-2 font-semibold text-nova">Activar</button>
+                <div class="min-h-0 flex-1 overflow-y-auto border-t border-white/10 px-4 pb-2 pt-1 lg:px-5">
+                    <?php admin_nav(); ?>
                 </div>
-                <div class="mt-4 grid gap-1 border-t border-slate-100 pt-3">
-                    <a href="<?= e(url('index.php')) ?>" class="flex items-center gap-2 rounded-2xl px-3 py-2 text-sm text-slate-600 hover:bg-slate-50"><?= icon('eye', 'h-4 w-4') ?> Ver tienda</a>
+                <div class="shrink-0 border-t border-white/10 p-4 pt-3 lg:px-5">
+                    <p data-alert-on class="mb-3 hidden rounded-2xl bg-white/5 px-3 py-2 text-xs leading-relaxed text-white/60">El tono está activo. Deja esta pestaña abierta para oír los pedidos.</p>
+                    <div data-alert-off class="mb-3 hidden rounded-2xl bg-white/5 px-3 py-3 text-xs leading-relaxed text-white/70">
+                        <p class="font-semibold text-white">Alertas apagadas</p>
+                        <p class="mt-1">Sin permiso de notificaciones no suena el aviso de pedidos.</p>
+                        <button type="button" data-alert-retry class="mt-2 font-semibold text-emerald-300">Activar</button>
+                    </div>
                     <form method="post" action="<?= e(url('admin/logout.php')) ?>">
                         <?= csrf_field() ?>
-                        <button type="submit" class="flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-left text-sm text-slate-600 hover:bg-slate-50"><?= icon('log-out', 'h-4 w-4') ?> Salir</button>
+                        <button type="submit" class="flex w-full items-center gap-3 rounded-full px-3 py-2.5 text-left text-sm text-white/80 hover:bg-white/5"><?= icon('log-out', 'h-4 w-4') ?> Cerrar sesión</button>
                     </form>
                 </div>
             </aside>
-            <div class="flex min-w-0 flex-col gap-4">
+            <div class="flex min-w-0 flex-col gap-4 px-4 py-4 lg:px-8 lg:py-6">
                 <?php render_flashes(); ?>
     <?php
 }

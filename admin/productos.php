@@ -37,6 +37,7 @@ $products = products_all(false);
                     <th class="px-2 py-2 font-medium">Prenda</th>
                     <th class="px-2 py-2 font-medium">Categoría</th>
                     <th class="px-2 py-2 font-medium">Precio</th>
+                    <th class="px-2 py-2 font-medium">Stock</th>
                     <th class="px-2 py-2 font-medium">Estado</th>
                     <th class="px-2 py-2 font-medium"></th>
                 </tr>
@@ -56,6 +57,7 @@ $products = products_all(false);
                         </td>
                         <td class="px-2 py-3"><?= e($category['name'] ?? $product['category']) ?></td>
                         <td class="px-2 py-3 font-medium"><?= e(money($product['price'])) ?></td>
+                        <td class="px-2 py-3 font-medium <?= (int) $product['stock'] > 0 ? '' : 'text-rose-600' ?>"><?= (int) $product['stock'] > 0 ? e((string) $product['stock']) : 'Agotado' ?></td>
                         <td class="px-2 py-3"><?= $product['active'] ? 'Visible' : 'Oculto' ?></td>
                         <td class="px-2 py-3">
                             <div class="flex items-center justify-end gap-3">

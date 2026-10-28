@@ -17,6 +17,7 @@ function check(bool $condition, string $message): void
 check(password_verify('nova123', (string) config('admin_password_hash')), 'admin password hash');
 check(count(products_all()) >= 4, 'catalog has products');
 check(product_find('polo-essential')['name'] === 'Polo Essential', 'find polo');
+check((int) product_find('polo-essential')['stock'] >= 8, 'polo stock');
 check(count(products_featured()) === 4, 'four featured products');
 check(count(products_query('orbit')) === 1, 'search orbit');
 check(count(home_categories()) === 3, 'home categories');

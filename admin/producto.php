@@ -16,6 +16,7 @@ $errors = [];
 $product = $current ?? [
     'name' => '',
     'price' => 0,
+    'stock' => 0,
     'category' => 'polos',
     'badge' => '',
     'colors' => [],
@@ -63,6 +64,12 @@ $input = 'mt-1 h-11 w-full rounded-2xl border border-slate-200 px-4 text-sm outl
             Precio (S/)
             <input type="number" name="price" min="0" step="1" value="<?= e((string) $product['price']) ?>" class="<?= e($input) ?>">
             <?php if (isset($errors['price'])): ?><span class="mt-1 block text-xs text-rose-600"><?= e($errors['price']) ?></span><?php endif; ?>
+        </label>
+        <label class="block text-sm font-medium">
+            Stock
+            <input type="number" name="stock" min="0" step="1" value="<?= e((string) ($product['stock'] ?? 0)) ?>" class="<?= e($input) ?>">
+            <span class="mt-1 block text-xs <?= ((int) ($product['stock'] ?? 0)) > 0 ? 'text-emerald-700' : 'text-rose-600' ?>"><?= ((int) ($product['stock'] ?? 0)) > 0 ? e((string) $product['stock']) . ' unidades disponibles' : 'Agotado' ?></span>
+            <?php if (isset($errors['stock'])): ?><span class="mt-1 block text-xs text-rose-600"><?= e($errors['stock']) ?></span><?php endif; ?>
         </label>
         <label class="block text-sm font-medium">
             Categoría

@@ -81,9 +81,9 @@ html.nova-alerts-ask .nova-alert-gate {
     right: 0;
     bottom: 0;
     z-index: 60;
-    width: min(18rem, 86vw);
+    width: min(100%, 24rem);
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
     border-radius: 0;
     transform: translateX(100%);
     visibility: hidden;

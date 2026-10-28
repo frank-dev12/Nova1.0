@@ -70,6 +70,7 @@ function product_normalize(array $product): array
         'id' => (string) ($product['id'] ?? ''),
         'name' => (string) ($product['name'] ?? ''),
         'price' => (int) ($product['price'] ?? 0),
+        'stock' => max(0, (int) ($product['stock'] ?? 0)),
         'category' => (string) ($product['category'] ?? ''),
         'badge' => (string) ($product['badge'] ?? ''),
         'colors' => $colors,
@@ -238,6 +239,7 @@ function product_from_request(array $post, array $files, ?array $current): array
     $errors = [];
     $name = trim((string) ($post['name'] ?? ''));
     $price = filter_var($post['price'] ?? null, FILTER_VALIDATE_INT);
+    $stock = filter_var($post['stock'] ?? null, FILTER_VALIDATE_INT);
     $category = (string) ($post['category'] ?? '');
     $description = trim((string) ($post['description'] ?? ''));
     $badge = trim((string) ($post['badge'] ?? ''));
@@ -252,6 +254,9 @@ function product_from_request(array $post, array $files, ?array $current): array
     }
     if ($price === false || $price < 0 || $price > 99999) {
         $errors['price'] = 'Ingresa un precio entero válido.';
+    }
+    if ($stock === false || $stock < 0 || $stock > 9999) {
+        $errors['stock'] = 'El stock debe ser un número entre 0 y 9999.';
     }
     if (!category_find($category)) {
         $errors['category'] = 'Elige una categoría.';
@@ -293,6 +298,7 @@ function product_from_request(array $post, array $files, ?array $current): array
         'id' => $id,
         'name' => $name,
         'price' => (int) ($price === false ? 0 : $price),
+        'stock' => (int) ($stock === false ? 0 : $stock),
         'category' => $category,
         'badge' => $badge,
         'colors' => $colors,
