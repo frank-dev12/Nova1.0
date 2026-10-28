@@ -19,13 +19,26 @@ $searchQuery = $searchQuery ?? '';
     <title><?= e($pageTitle) ?> · NØVA</title>
     <link rel="icon" href="<?= e(asset('favicon.svg')) ?>" type="image/svg+xml">
     <link rel="stylesheet" href="<?= e(asset('css/app.css')) ?>">
+    <script>
+        try {
+            if (sessionStorage.getItem('nova.entered') === '1' || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('nova-skip-loader');
+            }
+        } catch (error) {}
+    </script>
 </head>
-<body class="min-h-screen bg-[radial-gradient(1100px_420px_at_8%_-10%,#ffffff,transparent_60%),radial-gradient(900px_500px_at_100%_0%,#d7ecf8,transparent_55%),linear-gradient(180deg,#eef6fb_0%,#f5f8fb_42%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>">
+<body class="min-h-screen bg-[radial-gradient(1100px_420px_at_8%_-10%,#ffffff,transparent_60%),radial-gradient(900px_500px_at_100%_0%,#d7ecf8,transparent_55%),linear-gradient(180deg,#eef6fb_0%,#f5f8fb_42%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>" data-admin="<?= e(url('admin/login.php')) ?>">
+    <div class="nova-loader" data-loader role="status" aria-live="polite" aria-label="Cargando NØVA">
+        <div class="nova-loader-card">
+            <p class="nova-loader-mark">NØVA</p>
+            <span class="nova-loader-track" aria-hidden="true"><span class="nova-loader-bar"></span></span>
+        </div>
+    </div>
     <a href="#contenido" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-white focus:px-4 focus:py-2">Saltar al contenido</a>
     <div class="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-4 sm:px-6">
         <header class="sticky top-3 z-40 rounded-[22px] bg-white/95 px-3 py-2.5 shadow-[0_16px_40px_-28px_rgba(15,23,42,0.7)] backdrop-blur sm:px-4">
             <div class="flex items-center gap-2 sm:gap-3">
-                <a href="<?= e(url('index.php')) ?>" class="shrink-0 text-[1.35rem] font-black tracking-[-0.06em] text-ink">NØVA</a>
+                <a href="<?= e(url('index.php')) ?>" data-logo class="shrink-0 text-[1.35rem] font-black tracking-[-0.06em] text-ink">NØVA</a>
                 <nav class="ml-2 hidden items-center gap-1 lg:flex" aria-label="Principal">
                     <?php foreach (nav_items() as $key => [$label, $href]): ?>
                         <a href="<?= e($href) ?>" class="<?= $active === $key ? 'rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-ink' : 'rounded-full px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-ink' ?>" <?= $active === $key ? 'aria-current="page"' : '' ?>><?= e($label) ?></a>

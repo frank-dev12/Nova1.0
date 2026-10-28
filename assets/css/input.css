@@ -31,6 +31,90 @@
   font-family: "Caveat", cursive;
 }
 
+html.nova-skip-loader .nova-loader {
+  display: none;
+}
+
+.nova-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(900px 420px at 100% 0%, #d7ecf8, transparent 55%),
+    linear-gradient(180deg, #eef6fb 0%, #f7fafc 100%);
+  transition: opacity 420ms ease, visibility 420ms ease;
+}
+
+.nova-loader.is-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.nova-loader-card {
+  display: grid;
+  justify-items: center;
+  gap: 1.1rem;
+}
+
+.nova-loader-mark {
+  margin: 0;
+  font-size: 2.6rem;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  animation: nova-mark 1.1s ease-in-out infinite;
+}
+
+.nova-loader-track {
+  display: block;
+  width: 7.5rem;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(20, 20, 20, 0.08);
+}
+
+.nova-loader-bar {
+  display: block;
+  width: 45%;
+  height: 100%;
+  border-radius: inherit;
+  background: #ff5a1f;
+  animation: nova-bar 0.9s ease-in-out infinite;
+}
+
+[data-logo] {
+  transition: transform 160ms ease;
+}
+
+[data-logo].is-tapped {
+  transform: scale(0.92);
+}
+
+@keyframes nova-mark {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes nova-bar {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(260%);
+  }
+}
+
 .carousel.is-ready {
   display: grid;
 }
@@ -58,7 +142,11 @@
     scroll-behavior: auto;
   }
 
-  .carousel.is-ready > .hero-slide {
+  .carousel.is-ready > .hero-slide,
+  .nova-loader-mark,
+  .nova-loader-bar,
+  .nova-loader {
     transition: none !important;
+    animation: none !important;
   }
 }

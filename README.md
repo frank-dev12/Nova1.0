@@ -54,6 +54,8 @@ Cada página pública es un archivo PHP en la raíz. Arranca cargando `includes/
 
 El carrito no usa base de datos. Cada línea (producto, color y talla) se guarda en `$_SESSION`. El botón de agregar envía el formulario a `api/cart.php` con JavaScript. Si JavaScript no corre, el mismo formulario llega a `carrito.php` y la página se recarga.
 
+El logo NØVA, en la cabecera o en el pie, abre el inicio con un clic. Cuatro clics seguidos abren el panel. Al entrar a la tienda, la primera visita de la sesión muestra una pantalla de carga con la marca.
+
 El panel exige sesión de administrador. La contraseña no está en texto plano: en `includes/config.php` hay un hash y el login lo comprueba con `password_verify`. Los formularios del panel, del carrito y del contacto llevan un token de sesión para no aceptar un envío de otra página.
 
 `assets/js/app.js` se carga al final del layout. Ahí están el menú móvil, el carrusel, el corazón de favoritos (en `localStorage` del navegador), el contador del carrito y el desplegable de búsqueda. Los favoritos no se sincronizan con el servidor.
