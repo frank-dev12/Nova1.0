@@ -22,7 +22,7 @@ Abre `http://localhost:8000`.
 - Usuario: `admin`
 - Contraseña: `nova123`
 
-Cambia la contraseña y el WhatsApp en `includes/config.php` antes de publicar. El número actual (`+51 900 000 000`) es un placeholder.
+Cambia la contraseña en `includes/config.php` antes de publicar. El WhatsApp de la tienda es +51 961 740 274.
 
 ## Qué incluye esta versión
 

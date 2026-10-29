@@ -23,9 +23,10 @@ check(count(products_query('orbit')) === 1, 'search orbit');
 check(count(home_categories()) === 3, 'home categories');
 check(money(89) === 'S/ 89', 'money format');
 check(slugify('Pantalón Neo') === 'pantalon-neo', 'slugify');
-check(str_contains(whatsapp_link('Hola'), 'https://wa.me/'), 'whatsapp link');
+check(str_contains(whatsapp_link('Hola'), 'https://wa.me/51961740274'), 'whatsapp link');
+check((string) config('whatsapp_display') === '+51 961 740 274', 'whatsapp display');
 check(icon('search') !== '' && icon('nope') === '', 'icons');
-check(icon_whatsapp() !== '', 'whatsapp icon');
+check(icon_whatsapp() !== '' && icon_facebook() !== '' && icon_tiktok() !== '', 'social icons');
 
 $result = cart_add('polo-essential', 'Arena', 'M', 2);
 check($result['ok'] === true && $result['count'] === 2, 'add to cart');

@@ -37,7 +37,8 @@ $searchQuery = $searchQuery ?? '';
         </div>
     </div>
     <a href="#contenido" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-white focus:px-4 focus:py-2">Saltar al contenido</a>
-    <div class="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-4 sm:px-6">
+    <div class="flex min-h-screen w-full flex-col">
+        <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pb-8 pt-4 sm:px-6">
         <header class="sticky top-3 z-40 rounded-[22px] bg-white/95 px-3 py-2.5 shadow-[0_16px_40px_-28px_rgba(15,23,42,0.7)] backdrop-blur sm:px-4">
             <div class="flex items-center gap-2 sm:gap-3">
                 <a href="<?= e(url('index.php')) ?>" data-logo class="shrink-0 text-[1.35rem] font-black tracking-[-0.06em] text-ink">NØVA</a>
