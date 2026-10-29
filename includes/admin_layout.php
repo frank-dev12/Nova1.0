@@ -31,12 +31,12 @@ function admin_nav(): void
     echo '<nav class="grid">';
     foreach ($groups as $group => $items) {
         echo '<p class="px-3 pb-1 pt-5 text-[11px] font-medium uppercase tracking-[0.16em] text-white/40">' . e($group) . '</p>';
-        echo '<div class="grid gap-0.5">';
+        echo '<div class="grid gap-1">';
         foreach ($items as $key => [$label, $href, $iconName]) {
             $isActive = $active === $key;
             $class = $isActive
-                ? 'flex items-center gap-3 rounded-full bg-white/10 px-3 py-2.5 text-sm font-medium text-white'
-                : 'flex items-center gap-3 rounded-full px-3 py-2.5 text-sm text-white/75 hover:bg-white/5 hover:text-white';
+                ? 'flex items-center gap-3 rounded-full border border-[#c4a46a]/45 bg-white/10 px-3 py-2.5 text-sm font-medium text-white'
+                : 'flex items-center gap-3 rounded-full border border-[#c4a46a]/25 px-3 py-2.5 text-sm text-white/75 hover:border-[#c4a46a]/50 hover:bg-white/5 hover:text-white';
             echo '<a class="' . $class . '" href="' . e($href) . '">' . icon($iconName, 'h-4 w-4 shrink-0') . '<span>' . e($label) . '</span><span class="ml-auto flex items-center gap-2">';
             if ($key === 'mensajes' && messages_unread_count() > 0) {
                 echo '<span class="rounded-full bg-emerald-400/15 px-2 py-0.5 text-[10px] font-bold text-emerald-300">' . e((string) messages_unread_count()) . '</span>';
@@ -85,7 +85,7 @@ function admin_header(string $title, string $active): void
                     <span data-admin-icon-close class="hidden"><?= icon('x', 'h-5 w-5') ?></span>
                 </button>
             </div>
-            <aside id="menu-panel" data-admin-menu class="admin-side flex h-full flex-col overflow-hidden bg-[#2a2a2a] text-white lg:sticky lg:top-0 lg:h-screen">
+            <aside id="menu-panel" data-admin-menu class="admin-side flex h-full flex-col overflow-hidden bg-black/80 text-white backdrop-blur-md lg:sticky lg:top-0 lg:h-screen">
                 <div class="flex shrink-0 items-start gap-3 p-4 pb-3 lg:p-5 lg:pb-4">
                     <a href="<?= e(url('admin/index.php')) ?>" class="grid h-11 shrink-0 place-items-center rounded-2xl bg-black px-3 text-sm font-black tracking-tight">NØVA.</a>
                     <div class="min-w-0 flex-1 pt-0.5">
@@ -95,7 +95,7 @@ function admin_header(string $title, string $active): void
                         </div>
                         <p class="text-xs text-white/50">Gestión de tienda</p>
                     </div>
-                    <button type="button" class="grid h-9 w-9 shrink-0 place-items-center rounded-full text-white hover:bg-white/10 lg:hidden" data-admin-menu-close>
+                    <button type="button" class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#c4a46a]/30 text-white hover:bg-white/10 lg:hidden" data-admin-menu-close>
                         <span class="sr-only">Cerrar menú</span>
                         <?= icon('x', 'h-5 w-5') ?>
                     </button>
@@ -112,7 +112,7 @@ function admin_header(string $title, string $active): void
                     </div>
                     <form method="post" action="<?= e(url('admin/logout.php')) ?>">
                         <?= csrf_field() ?>
-                        <button type="submit" class="flex w-full items-center gap-3 rounded-full px-3 py-2.5 text-left text-sm text-white/80 hover:bg-white/5"><?= icon('log-out', 'h-4 w-4') ?> Cerrar sesión</button>
+                        <button type="submit" class="flex w-full items-center gap-3 rounded-full border border-[#c4a46a]/25 px-3 py-2.5 text-left text-sm text-white/80 hover:border-[#c4a46a]/50 hover:bg-white/5"><?= icon('log-out', 'h-4 w-4') ?> Cerrar sesión</button>
                     </form>
                 </div>
             </aside>
