@@ -223,6 +223,7 @@
                 const title = fresh.length > 1 ? `${fresh.length} pedidos nuevos` : 'Nuevo pedido recibido';
                 showLive(newest);
                 notify(title, detail, newest.id);
+                document.dispatchEvent(new CustomEvent('nova:orders-changed'));
             } catch (error) {
             } finally {
                 ticking = false;

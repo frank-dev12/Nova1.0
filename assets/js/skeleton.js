@@ -77,6 +77,7 @@
     }
 
     document.addEventListener('click', (event) => {
+        if (document.body?.dataset.adminSection) return;
         if (event.defaultPrevented || event.button !== 0) return;
         if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         const link = event.target.closest('a[href]');
@@ -88,6 +89,7 @@
     });
 
     document.addEventListener('submit', (event) => {
+        if (document.body?.dataset.adminSection) return;
         const form = event.target;
         if (!(form instanceof HTMLFormElement) || form.target === '_blank') return;
         const url = internalUrl(form.action || window.location.href);

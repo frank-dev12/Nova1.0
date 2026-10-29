@@ -151,10 +151,10 @@ function render_flashes(): void
     $error = flash('error');
 
     if ($success) {
-        echo '<div class="rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800" role="status">' . e($success) . '</div>';
+        echo '<div data-flash class="rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800" role="status">' . e($success) . '</div>';
     }
     if ($error) {
-        echo '<div class="rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-800" role="alert">' . e($error) . '</div>';
+        echo '<div data-flash class="rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-800" role="alert">' . e($error) . '</div>';
     }
 }
 

@@ -37,18 +37,18 @@ function admin_nav(): void
             $class = $isActive
                 ? 'flex items-center gap-3 rounded-full border border-[#c4a46a]/45 bg-white/10 px-3 py-2.5 text-sm font-medium text-white'
                 : 'flex items-center gap-3 rounded-full border border-[#c4a46a]/25 px-3 py-2.5 text-sm text-white/75 hover:border-[#c4a46a]/50 hover:bg-white/5 hover:text-white';
-            echo '<a class="' . $class . '" href="' . e($href) . '">' . icon($iconName, 'h-4 w-4 shrink-0') . '<span>' . e($label) . '</span><span class="ml-auto flex items-center gap-2">';
-            if ($key === 'mensajes' && messages_unread_count() > 0) {
-                echo '<span class="rounded-full bg-emerald-400/15 px-2 py-0.5 text-[10px] font-bold text-emerald-300">' . e((string) messages_unread_count()) . '</span>';
+            echo '<a data-admin-link="' . e($key) . '" class="' . $class . '" href="' . e($href) . '"' . ($isActive ? ' aria-current="page"' : '') . '>' . icon($iconName, 'h-4 w-4 shrink-0') . '<span>' . e($label) . '</span><span class="ml-auto flex items-center gap-2">';
+            if ($key === 'mensajes') {
+                $unread = messages_unread_count();
+                $hidden = $unread > 0 ? '' : ' hidden';
+                echo '<span data-message-badge class="rounded-full bg-emerald-400/15 px-2 py-0.5 text-[10px] font-bold text-emerald-300' . $hidden . '">' . e((string) $unread) . '</span>';
             }
             if ($key === 'pedidos') {
                 $pending = orders_unread_count();
                 $hidden = $pending > 0 ? '' : ' hidden';
                 echo '<span data-order-badge class="rounded-full bg-emerald-400/15 px-2 py-0.5 text-[10px] font-bold text-emerald-300' . $hidden . '">' . e((string) $pending) . '</span>';
             }
-            if ($isActive) {
-                echo icon('chevron-right', 'h-4 w-4 text-white/50');
-            }
+            echo '<span data-admin-chevron class="' . ($isActive ? 'inline-flex' : 'hidden') . '">' . icon('chevron-right', 'h-4 w-4 text-white/50') . '</span>';
             echo '</span></a>';
         }
         echo '</div>';
@@ -72,7 +72,7 @@ function admin_header(string $title, string $active): void
         <script>window.novaSkeletonStart = performance.now();</script>
         <?php render_alert_head(); ?>
     </head>
-    <body class="min-h-screen bg-[linear-gradient(180deg,#eef6fb_0%,#f7fafc_40%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>" data-sw="<?= e(url('sw.js')) ?>" data-admin-alerts="<?= e(url('api/alerts.php')) ?>" data-orders-url="<?= e(url('admin/pedidos.php')) ?>">
+    <body class="min-h-screen bg-[linear-gradient(180deg,#eef6fb_0%,#f7fafc_40%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>" data-sw="<?= e(url('sw.js')) ?>" data-admin-alerts="<?= e(url('api/alerts.php')) ?>" data-orders-url="<?= e(url('admin/pedidos.php')) ?>" data-admin-section="<?= e($active) ?>" data-admin-label="<?= e($title) ?>">
         <?php render_alert_gate(); ?>
         <div class="admin-skeleton" data-admin-skeleton aria-hidden="true">
             <div class="admin-skeleton-side nova-skeleton-block"></div>
@@ -102,7 +102,7 @@ function admin_header(string $title, string $active): void
         <div class="lg:grid lg:min-h-screen lg:grid-cols-[340px_1fr]">
             <div class="mx-4 mt-4 flex h-14 items-center gap-2 self-start rounded-2xl border border-white/80 bg-white/70 px-3 text-ink shadow-[0_10px_28px_-14px_rgba(20,20,20,0.45),0_0_0_1px_rgba(20,20,20,0.04)] backdrop-blur-md lg:hidden">
                 <a href="<?= e(url('admin/index.php')) ?>" class="px-1 text-lg font-black tracking-[-0.06em]">NØVA</a>
-                <span class="min-w-0 truncate text-sm text-slate-500"><?= e($title) ?></span>
+                <span data-admin-bar-title class="min-w-0 truncate text-sm text-slate-500"><?= e($title) ?></span>
                 <button type="button" class="ml-auto grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink hover:bg-black/5" data-admin-menu-toggle aria-expanded="false" aria-controls="menu-panel">
                     <span class="sr-only">Abrir menú del panel</span>
                     <span data-admin-icon-open><?= icon('menu', 'h-5 w-5') ?></span>
@@ -140,7 +140,7 @@ function admin_header(string $title, string $active): void
                     </form>
                 </div>
             </aside>
-            <div class="flex min-w-0 flex-col gap-4 px-4 py-4 lg:px-8 lg:py-6">
+            <div id="contenido-panel" data-admin-content tabindex="-1" class="flex min-w-0 flex-col gap-4 px-4 py-4 outline-none lg:px-8 lg:py-6">
                 <?php render_flashes(); ?>
     <?php
 }
@@ -177,6 +177,7 @@ function admin_footer(): void
             }
         </script>
         <script src="<?= e(asset('js/skeleton.js')) ?>" defer></script>
+        <script src="<?= e(asset('js/admin-nav.js')) ?>" defer></script>
         <script src="<?= e(asset('js/alerts.js')) ?>" defer></script>
     </body>
     </html>
