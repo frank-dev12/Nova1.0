@@ -1,32 +1,5 @@
 (() => {
     const base = document.body?.dataset.base || '';
-    const loader = document.querySelector('[data-loader]');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (loader) {
-        const skip = reduceMotion || sessionStorage.getItem('nova.entered') === '1';
-        if (skip) {
-            loader.remove();
-            sessionStorage.setItem('nova.entered', '1');
-        } else {
-            const started = performance.now();
-            let closed = false;
-            const closeLoader = () => {
-                if (closed) return;
-                closed = true;
-                loader.classList.add('is-done');
-                sessionStorage.setItem('nova.entered', '1');
-                window.setTimeout(() => loader.remove(), 460);
-            };
-            const arm = () => {
-                const wait = Math.max(0, 900 - (performance.now() - started));
-                window.setTimeout(closeLoader, wait);
-            };
-            if (document.readyState === 'complete') arm();
-            else window.addEventListener('load', arm);
-            window.setTimeout(closeLoader, 2600);
-        }
-    }
 
     document.querySelectorAll('[data-logo]').forEach((logo) => {
         let clicks = 0;

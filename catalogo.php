@@ -6,6 +6,7 @@ require __DIR__ . '/includes/bootstrap.php';
 
 $q = trim((string) ($_GET['q'] ?? ''));
 $categoria = trim((string) ($_GET['categoria'] ?? ''));
+$talla = trim((string) ($_GET['talla'] ?? ''));
 $orden = (string) ($_GET['orden'] ?? 'destacados');
 $allowedSorts = ['destacados', 'precio-asc', 'precio-desc', 'nombre'];
 if (!in_array($orden, $allowedSorts, true)) {
@@ -15,7 +16,17 @@ if ($categoria !== '' && !category_find($categoria)) {
     $categoria = '';
 }
 
-$products = products_query($q, $categoria, $orden);
+$sizePool = products_query($q, $categoria, $orden);
+$sizes = [];
+foreach ($sizePool as $product) {
+    foreach ($product['sizes'] as $size) {
+        $sizes[$size] = true;
+    }
+}
+if ($talla !== '' && !isset($sizes[$talla])) {
+    $talla = '';
+}
+$products = $talla === '' ? $sizePool : products_query($q, $categoria, $orden, $talla);
 $category = $categoria !== '' ? category_find($categoria) : null;
 $pageTitle = $category ? $category['name'] : 'Catálogo';
 $active = 'catalogo';
@@ -24,7 +35,7 @@ $metaDescription = 'Explora polos, casacas, pantalones y hoodies de NØVA.';
 
 require __DIR__ . '/includes/header.php';
 
-function catalog_href(string $q, string $categoria, string $orden): string
+function catalog_href(string $q, string $categoria, string $orden, string $talla = ''): string
 {
     $params = [];
     if ($q !== '') {
@@ -32,6 +43,9 @@ function catalog_href(string $q, string $categoria, string $orden): string
     }
     if ($categoria !== '') {
         $params['categoria'] = $categoria;
+    }
+    if ($talla !== '') {
+        $params['talla'] = $talla;
     }
     if ($orden !== '' && $orden !== 'destacados') {
         $params['orden'] = $orden;
@@ -57,6 +71,7 @@ function catalog_href(string $q, string $categoria, string $orden): string
         <form method="get" class="flex items-center gap-2">
             <?php if ($q !== ''): ?><input type="hidden" name="q" value="<?= e($q) ?>"><?php endif; ?>
             <?php if ($categoria !== ''): ?><input type="hidden" name="categoria" value="<?= e($categoria) ?>"><?php endif; ?>
+            <?php if ($talla !== ''): ?><input type="hidden" name="talla" value="<?= e($talla) ?>"><?php endif; ?>
             <label class="sr-only" for="orden">Ordenar</label>
             <span class="text-slate-400"><?= icon('sliders-horizontal', 'h-4 w-4') ?></span>
             <select id="orden" name="orden" class="h-10 rounded-full border border-slate-200 bg-white px-3 text-sm outline-none focus:border-slate-400" onchange="this.form.requestSubmit()">
@@ -69,11 +84,20 @@ function catalog_href(string $q, string $categoria, string $orden): string
         </form>
     </div>
     <div class="mt-5 flex flex-wrap gap-2">
-        <a href="<?= e(catalog_href($q, '', $orden)) ?>" class="<?= $categoria === '' ? 'shrink-0 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white' : 'shrink-0 rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200' ?>">Todos</a>
+        <a href="<?= e(catalog_href($q, '', $orden, $talla)) ?>" class="<?= $categoria === '' ? 'shrink-0 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white' : 'shrink-0 rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200' ?>">Todos</a>
         <?php foreach (categories_all() as $item): ?>
-            <a href="<?= e(catalog_href($q, $item['slug'], $orden)) ?>" class="<?= $categoria === $item['slug'] ? 'shrink-0 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white' : 'shrink-0 rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200' ?>"><?= e($item['name']) ?></a>
+            <a href="<?= e(catalog_href($q, $item['slug'], $orden, $talla)) ?>" class="<?= $categoria === $item['slug'] ? 'shrink-0 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white' : 'shrink-0 rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200' ?>"><?= e($item['name']) ?></a>
         <?php endforeach; ?>
     </div>
+    <?php if ($sizes !== []): ?>
+        <div class="mt-3 flex flex-wrap items-center gap-2">
+            <span class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Talla</span>
+            <a href="<?= e(catalog_href($q, $categoria, $orden)) ?>" class="<?= $talla === '' ? 'rounded-full bg-ink px-3 py-1.5 text-sm font-semibold text-white' : 'rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200' ?>">Todas</a>
+            <?php foreach (array_keys($sizes) as $size): ?>
+                <a href="<?= e(catalog_href($q, $categoria, $orden, (string) $size)) ?>" class="<?= $talla === (string) $size ? 'rounded-full bg-ink px-3 py-1.5 text-sm font-semibold text-white' : 'rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200' ?>"><?= e((string) $size) ?></a>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
     <?php if ($products === []): ?>
         <div class="mt-8 rounded-3xl bg-slate-50 px-6 py-14 text-center">
             <span class="mx-auto grid h-12 w-12 place-items-center rounded-full bg-white text-slate-500"><?= icon('search', 'h-5 w-5') ?></span>

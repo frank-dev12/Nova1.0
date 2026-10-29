@@ -80,6 +80,21 @@ function cart_normalize_variant(array $product, string $color, string $size): ar
     return [$color, $size];
 }
 
+function cart_held(string $id, ?string $exceptKey = null): int
+{
+    $held = 0;
+    foreach (cart_bucket() as $key => $line) {
+        if ($exceptKey !== null && (string) $key === $exceptKey) {
+            continue;
+        }
+        if ((string) ($line['id'] ?? '') === $id) {
+            $held += (int) ($line['qty'] ?? 0);
+        }
+    }
+
+    return $held;
+}
+
 function cart_add(string $id, string $color, string $size, int $qty = 1): array
 {
     $product = product_find($id);
@@ -92,11 +107,15 @@ function cart_add(string $id, string $color, string $size, int $qty = 1): array
     $key = cart_key($id, $color, $size);
     $cart = cart_bucket();
     $current = (int) ($cart[$key]['qty'] ?? 0);
+    $room = max(0, (int) $product['stock'] - cart_held($id, $key));
+    if ($room < 1) {
+        return cart_result(false, 'No queda stock de esa prenda.');
+    }
     $cart[$key] = [
         'id' => $id,
         'color' => $color,
         'size' => $size,
-        'qty' => min(8, $current + $qty),
+        'qty' => min(8, $current + $qty, $room),
     ];
     $_SESSION['nova_cart'] = $cart;
 
@@ -115,7 +134,14 @@ function cart_update(string $key, int $qty): array
         return cart_result(true, 'Se quitó del carrito.');
     }
 
-    $cart[$key]['qty'] = min(8, $qty);
+    $id = (string) ($cart[$key]['id'] ?? '');
+    $product = product_find($id);
+    $room = $product === null ? 0 : max(0, (int) $product['stock'] - cart_held($id, $key));
+    if ($room < 1) {
+        return cart_result(false, 'No queda stock de esa prenda.');
+    }
+
+    $cart[$key]['qty'] = min(8, $qty, $room);
     $_SESSION['nova_cart'] = $cart;
 
     return cart_result(true, 'Actualizamos la cantidad.');
@@ -155,15 +181,24 @@ function cart_handle(array $post): array
     };
 }
 
-function cart_whatsapp_text(): string
+function cart_whatsapp_text(string $name = '', string $phone = '', string $code = ''): string
 {
-    $parts = ['Hola NØVA, quiero hacer este pedido:'];
+    $parts = ['Hola NØVA, quiero hacer un pedido.'];
+    if ($code !== '') {
+        $parts[] = 'Código: ' . $code;
+    }
+    if ($name !== '') {
+        $parts[] = 'Nombre: ' . $name;
+    }
+    if ($phone !== '') {
+        $parts[] = 'Teléfono: ' . $phone;
+    }
     foreach (cart_lines() as $line) {
         if (!$line['available']) {
             continue;
         }
         $parts[] = sprintf(
-            '- %s (%s / %s) x%d — %s',
+            "- %s\n  Color: %s | Talla: %s | Cantidad: %d | %s",
             $line['name'],
             $line['color'],
             $line['size'],

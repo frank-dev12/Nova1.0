@@ -59,6 +59,10 @@ require __DIR__ . '/includes/header.php';
         <?php endif; ?>
         <h1 class="mt-3 text-3xl font-black tracking-[-0.04em] sm:text-4xl"><?= e($product['name']) ?></h1>
         <p class="mt-2 text-2xl font-bold"><?= e(money($product['price'])) ?></p>
+        <?php $stock = (int) $product['stock']; ?>
+        <p class="mt-2 text-sm font-semibold <?= $stock > 0 ? 'text-emerald-700' : 'text-rose-600' ?>">
+            <?= $stock > 0 ? e($stock . ' en stock') : 'Agotado' ?>
+        </p>
         <p class="mt-4 max-w-md text-sm leading-relaxed text-slate-600"><?= e($product['description']) ?></p>
 
         <form method="post" action="<?= e(url('carrito.php')) ?>" data-cart-form class="mt-6 space-y-5">
@@ -92,12 +96,12 @@ require __DIR__ . '/includes/header.php';
             </fieldset>
             <label class="block text-sm font-semibold">
                 Cantidad
-                <input type="number" name="qty" value="1" min="1" max="8" class="mt-2 h-11 w-24 rounded-full border border-slate-200 px-4 text-sm font-medium outline-none focus:border-slate-400">
+                <input type="number" name="qty" value="1" min="1" max="<?= e((string) max(1, min(8, $stock))) ?>" <?= $stock < 1 ? 'disabled' : '' ?> class="mt-2 h-11 w-24 rounded-full border border-slate-200 px-4 text-sm font-medium outline-none focus:border-slate-400 disabled:bg-slate-100">
             </label>
             <div class="flex flex-col gap-3 sm:flex-row">
-                <button type="submit" class="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-nova px-6 text-sm font-semibold text-white transition hover:brightness-95">
+                <button type="submit" class="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-nova px-6 text-sm font-semibold text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-slate-300" <?= $stock < 1 ? 'disabled' : '' ?>>
                     <?= icon('plus', 'h-4 w-4') ?>
-                    Agregar al carrito
+                    <?= $stock < 1 ? 'Agotado' : 'Agregar al carrito' ?>
                 </button>
                 <a href="<?= e(whatsapp_link($waText)) ?>" target="_blank" rel="noopener noreferrer" class="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-slate-200 px-6 text-sm font-semibold transition hover:bg-slate-50">
                     <?= icon_whatsapp('h-4 w-4') ?>

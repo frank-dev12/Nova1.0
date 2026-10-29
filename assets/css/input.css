@@ -35,6 +35,169 @@ html.nova-skip-loader .nova-loader {
   display: none;
 }
 
+.nova-alert-gate {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  padding: 1rem;
+  background: rgba(20, 20, 20, 0.42);
+}
+
+html.nova-alerts-ask {
+  overflow: hidden;
+}
+
+html.nova-alerts-ask .nova-alert-gate {
+  display: grid;
+  place-items: center;
+}
+
+.admin-backdrop {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .admin-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: block;
+    border: 0;
+    background: rgba(20, 20, 20, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 280ms ease;
+  }
+
+  .admin-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .admin-side {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    width: min(100%, 24rem);
+    height: 100%;
+    overflow: hidden;
+    border-radius: 0;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 280ms ease, visibility 0s linear 280ms;
+  }
+
+  .admin-side.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 280ms ease, visibility 0s linear 0s;
+  }
+}
+
+html.admin-menu-open {
+  overflow: hidden;
+}
+
+.nova-skeleton-block,
+.nova-img-veil {
+  background: linear-gradient(90deg, #e4ebf1 0%, #f7fafc 45%, #e4ebf1 100%);
+  background-size: 220% 100%;
+  animation: nova-skeleton 1.15s ease-in-out infinite;
+}
+
+.nova-img-frame {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: top;
+}
+
+.nova-img-frame.is-wide {
+  display: block;
+  width: 100%;
+}
+
+.nova-img-frame.is-fill {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.nova-img-frame.is-fill > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nova-img-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.nova-skeleton-frame {
+  width: min(72rem, calc(100% - 2rem));
+}
+
+.admin-skeleton {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(180deg, #eef6fb 0%, #f7fafc 40%, #e7f2fa 100%);
+}
+
+.admin-skeleton-side {
+  display: none;
+}
+
+.admin-skeleton-main {
+  min-width: 0;
+}
+
+html.nova-skip-admin-skeleton .admin-skeleton {
+  display: none;
+}
+
+.admin-skeleton.is-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 420ms ease, visibility 0s linear 420ms;
+}
+
+@media (min-width: 1024px) {
+  .admin-skeleton {
+    grid-template-columns: 340px 1fr;
+  }
+
+  .admin-skeleton-side {
+    display: block;
+    min-height: 100%;
+    border-radius: 28px;
+  }
+}
+
+@keyframes nova-skeleton {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
 .nova-loader {
   position: fixed;
   inset: 0;
@@ -44,13 +207,14 @@ html.nova-skip-loader .nova-loader {
   background:
     radial-gradient(900px 420px at 100% 0%, #d7ecf8, transparent 55%),
     linear-gradient(180deg, #eef6fb 0%, #f7fafc 100%);
-  transition: opacity 420ms ease, visibility 420ms ease;
+  transition: opacity 280ms ease, visibility 0s linear 0s;
 }
 
 .nova-loader.is-done {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  transition: opacity 420ms ease, visibility 0s linear 420ms;
 }
 
 .nova-loader-card {
@@ -145,7 +309,11 @@ html.nova-skip-loader .nova-loader {
   .carousel.is-ready > .hero-slide,
   .nova-loader-mark,
   .nova-loader-bar,
-  .nova-loader {
+  .nova-skeleton-block,
+  .nova-img-veil,
+  .nova-loader,
+  .admin-side,
+  .admin-backdrop {
     transition: none !important;
     animation: none !important;
   }

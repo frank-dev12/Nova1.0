@@ -3,6 +3,7 @@
     "id": "polo-essential",
     "name": "Polo Essential",
     "price": 89,
+    "stock": 14,
     "category": "polos",
     "badge": "Nuevo",
     "colors": [
@@ -24,6 +25,7 @@
     "id": "polo-base",
     "name": "Polo Base",
     "price": 79,
+    "stock": 18,
     "category": "polos",
     "badge": "",
     "colors": [
@@ -45,6 +47,7 @@
     "id": "casaca-orbit",
     "name": "Casaca Orbit",
     "price": 219,
+    "stock": 6,
     "category": "casacas",
     "badge": "",
     "colors": [
@@ -66,6 +69,7 @@
     "id": "casaca-norte",
     "name": "Casaca Norte",
     "price": 199,
+    "stock": 4,
     "category": "casacas",
     "badge": "",
     "colors": [
@@ -87,6 +91,7 @@
     "id": "cargo-neo",
     "name": "Cargo Neo",
     "price": 149,
+    "stock": 9,
     "category": "pantalones",
     "badge": "",
     "colors": [
@@ -108,6 +113,7 @@
     "id": "hoodie-cloud",
     "name": "Hoodie Cloud",
     "price": 169,
+    "stock": 11,
     "category": "hoodies",
     "badge": "",
     "colors": [
@@ -130,6 +136,7 @@
     "id": "hoodie-core",
     "name": "Hoodie Core",
     "price": 159,
+    "stock": 0,
     "category": "hoodies",
     "badge": "",
     "colors": [
