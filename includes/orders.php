@@ -194,19 +194,16 @@ function order_place(string $name, string $phone): array
         return ['ok' => false, 'message' => 'El carrito está vacío.'];
     }
 
-    $alert = !admin_logged_in();
-    $code = $alert ? order_next_code() : '';
+    $code = order_next_code();
     $text = cart_whatsapp_text($name, $phone, $code);
-    if ($alert) {
-        order_create($name, $phone, $lines, cart_total(), $code);
-        cart_clear();
-    }
+    order_create($name, $phone, $lines, cart_total(), $code);
+    cart_clear();
 
     return [
         'ok' => true,
-        'alert' => $alert,
+        'alert' => true,
         'code' => $code,
-        'message' => $alert ? 'Pedido registrado. Se abre WhatsApp.' : 'El pedido de un administrador no avisa al panel.',
+        'message' => 'Pedido registrado. Se abre WhatsApp.',
         'whatsapp' => whatsapp_link($text),
     ];
 }

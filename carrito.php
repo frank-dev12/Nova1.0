@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $pageTitle = 'Carrito';
 $active = 'carrito';
+$skipPageLoader = true;
 $lines = cart_lines();
 $total = cart_total();
 require __DIR__ . '/includes/header.php';
@@ -103,10 +104,7 @@ require __DIR__ . '/includes/header.php';
                     <span>Subtotal</span>
                     <span class="font-semibold"><?= e(money($total)) ?></span>
                 </div>
-                <p class="mt-3 text-xs leading-relaxed text-slate-500">Al pedir por WhatsApp, el pedido se guarda primero<?php if (!admin_logged_in()): ?> y avisa al panel con un tono<?php endif; ?>. El mensaje lleva el código, la talla y el total. Coordinamos el envío a todo el Perú. Aún no hay pago en línea.</p>
-                <?php if (admin_logged_in()): ?>
-                    <p class="mt-3 text-xs leading-relaxed text-slate-500">Estás como administrador: este pedido no genera alerta.</p>
-                <?php endif; ?>
+                <p class="mt-3 text-xs leading-relaxed text-slate-500">Al pedir por WhatsApp, el pedido se guarda primero y avisa al panel con un tono. El mensaje lleva el código, la talla y el total. Coordinamos el envío a todo el Perú. Aún no hay pago en línea.</p>
                 <form method="post" action="<?= e(url('carrito.php')) ?>" class="mt-5 grid gap-3">
                     <?= csrf_field() ?>
                     <input type="hidden" name="action" value="checkout">

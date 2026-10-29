@@ -197,12 +197,18 @@
 
     function startAdminWatch() {
         const endpoint = document.body.dataset.adminAlerts;
-        if (!endpoint || watching || !alertsEnabled()) return;
+        if (!endpoint || watching) return;
         watching = true;
         const seen = new Set((sessionStorage.getItem('nova.heard') || '').split(',').filter(Boolean));
         let ticking = false;
+        const remember = (id) => {
+            seen.add(id);
+            const stored = new Set((sessionStorage.getItem('nova.heard') || '').split(',').filter(Boolean));
+            stored.add(id);
+            sessionStorage.setItem('nova.heard', [...stored].join(','));
+        };
         const tick = async () => {
-            if (ticking || !alertsEnabled()) return;
+            if (ticking) return;
             ticking = true;
             try {
                 const response = await fetch(endpoint, {
@@ -213,16 +219,16 @@
                 if (!response.ok) return;
                 const data = await response.json();
                 applyStats(data);
+                (sessionStorage.getItem('nova.heard') || '').split(',').filter(Boolean).forEach((id) => seen.add(id));
                 const fresh = (Array.isArray(data.orders) ? data.orders : []).filter((order) => order.id && !seen.has(order.id));
                 if (fresh.length === 0) return;
-                fresh.forEach((order) => seen.add(order.id));
-                sessionStorage.setItem('nova.heard', [...seen].join(','));
+                fresh.forEach((order) => remember(order.id));
                 playTone();
                 const newest = fresh[0];
                 const detail = [newest.code, newest.total_label].filter(Boolean).join(' · ') || newest.summary || 'Un cliente terminó un pedido.';
                 const title = fresh.length > 1 ? `${fresh.length} pedidos nuevos` : 'Nuevo pedido recibido';
                 showLive(newest);
-                notify(title, detail, newest.id);
+                if (permission() === 'granted') notify(title, detail, newest.id);
                 document.dispatchEvent(new CustomEvent('nova:orders-changed'));
             } catch (error) {
             } finally {
@@ -230,10 +236,11 @@
             }
         };
         tick();
-        window.setInterval(tick, 7000);
+        window.setInterval(tick, 4000);
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') tick();
         });
+        window.addEventListener('pageshow', () => tick());
     }
 
     allowButton?.addEventListener('click', async () => {
@@ -261,7 +268,7 @@
             return;
         }
         writeChoice('denied');
-        setStatus('No se otorgó el permiso. El sistema de alertas no funciona en este dispositivo.');
+        setStatus('No se otorgó el permiso del navegador. El pedido igual entra al panel.');
         denyButton.textContent = 'Entendido';
         allowButton.classList.add('hidden');
     });
@@ -292,12 +299,13 @@
     });
 
     document.addEventListener('pointerdown', () => {
-        if (alertsEnabled()) unlockTone();
+        unlockTone();
     }, { once: true });
 
+    if (document.body?.dataset.adminAlerts) startAdminWatch();
     if (alertsEnabled()) {
         hideGate();
-        registerWorker().then(startAdminWatch);
+        registerWorker();
     }
     syncBanners();
     if (document.documentElement.classList.contains('nova-alerts-ask')) {

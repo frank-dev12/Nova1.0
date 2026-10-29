@@ -12,7 +12,7 @@ $orders = array_slice(orders_all(), 0, 6);
 <section class="rounded-[28px] bg-white p-4 sm:p-6">
     <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">Hoy</p>
     <h1 class="mt-1 text-2xl font-black tracking-[-0.04em] sm:text-3xl">Resumen</h1>
-    <p class="mt-2 text-sm leading-relaxed text-slate-500">Los pedidos de clientes quedan guardados aquí y después se abren en WhatsApp. La hora está en Lima.</p>
+    <p class="mt-2 text-sm leading-relaxed text-slate-500">Los pedidos quedan guardados aquí y después se abren en WhatsApp. La hora está en Lima.</p>
 </section>
 <section class="grid grid-cols-1 gap-3 sm:grid-cols-3">
     <article class="min-w-0 rounded-[24px] bg-white p-4 sm:p-5">

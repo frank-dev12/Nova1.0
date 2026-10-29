@@ -52,14 +52,23 @@ try {
     check(order_place('Ana', '12')['ok'] === false, 'reject short phone');
     $_SESSION['nova_admin'] = 'admin';
     $adminOrder = order_place('Admin', '987654321');
-    check($adminOrder['ok'] === true && $adminOrder['alert'] === false, 'admin checkout does not alert');
-    check(orders_unread_count() === $before, 'admin checkout stores nothing');
+    check($adminOrder['ok'] === true && $adminOrder['alert'] === true, 'admin checkout alerts');
+    check(orders_unread_count() === $before + 1, 'admin checkout is stored');
+    check(cart_count() === 0, 'admin checkout clears cart');
     check(str_contains($adminOrder['whatsapp'], 'Nombre'), 'whatsapp includes name');
+    $adminStored = null;
+    foreach (orders_unread() as $order) {
+        if (($order['name'] ?? '') === 'Admin') {
+            $adminStored = $order;
+        }
+    }
+    check(is_array($adminStored), 'admin order exists');
     unset($_SESSION['nova_admin']);
+    cart_add('polo-essential', 'Arena', 'M', 1);
     $customerOrder = order_place('Lucía', '987 654 321');
     check($customerOrder['ok'] === true && $customerOrder['alert'] === true, 'customer checkout alerts');
     check(cart_count() === 0, 'cart clears after checkout');
-    check(orders_unread_count() === $before + 1, 'one unread order');
+    check(orders_unread_count() === $before + 2, 'two unread orders');
     $stored = null;
     foreach (orders_unread() as $order) {
         if (($order['name'] ?? '') === 'Lucía') {
@@ -72,6 +81,7 @@ try {
     check(str_contains($customerOrder['whatsapp'], rawurlencode('Código: ' . $stored['code'])) || str_contains(urldecode($customerOrder['whatsapp']), $stored['code']), 'whatsapp includes code');
     check(str_contains(order_summary($stored), 'Polo Essential'), 'order summary');
     check(orders_today_count() >= 1, 'today orders');
+    order_mark_read((string) $adminStored['id']);
     order_mark_read((string) $stored['id']);
     $marked = null;
     foreach (orders_all() as $order) {

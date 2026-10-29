@@ -18,7 +18,7 @@ $orders = orders_all();
 ?>
 <section class="rounded-[28px] bg-white p-4 sm:p-6">
     <h1 class="text-2xl font-black tracking-tight">Pedidos</h1>
-    <p class="mt-1 text-sm text-slate-500">Llegan cuando alguien que no es administrador termina el carrito. La hora está en Lima. El tono suena en el dispositivo donde aceptaste las notificaciones, con esta pestaña abierta.</p>
+    <p class="mt-1 text-sm text-slate-500">Llegan cuando alguien termina el carrito, también con la sesión de administrador abierta. La hora está en Lima. Con esta pestaña abierta suena el tono y el pedido entra a la lista. El aviso del sistema aparece si aceptaste las notificaciones.</p>
     <?php if ($orders === []): ?>
         <div class="mt-8 rounded-3xl bg-slate-50 px-6 py-12 text-center">
             <span class="mx-auto grid h-12 w-12 place-items-center rounded-full bg-white text-slate-500"><?= icon('bell', 'h-5 w-5') ?></span>

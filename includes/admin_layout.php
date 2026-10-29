@@ -131,7 +131,7 @@ function admin_header(string $title, string $active): void
                     <p data-alert-on class="mb-3 hidden rounded-2xl bg-white/5 px-3 py-2 text-xs leading-relaxed text-white/60">El tono está activo. Deja esta pestaña abierta para oír los pedidos.</p>
                     <div data-alert-off class="mb-3 hidden rounded-2xl bg-white/5 px-3 py-3 text-xs leading-relaxed text-white/70">
                         <p class="font-semibold text-white">Alertas apagadas</p>
-                        <p class="mt-1">Sin permiso de notificaciones no suena el aviso de pedidos.</p>
+                        <p class="mt-1">Sin permiso del navegador no aparece el aviso del sistema. El pedido igual entra a esta lista.</p>
                         <button type="button" data-alert-retry class="mt-2 font-semibold text-emerald-300">Activar</button>
                     </div>
                     <form method="post" action="<?= e(url('admin/logout.php')) ?>">
