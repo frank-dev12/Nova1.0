@@ -69,13 +69,7 @@ function admin_header(string $title, string $active): void
         <title><?= e($title) ?> · Panel NØVA</title>
         <link rel="icon" href="<?= e(asset('favicon.svg')) ?>" type="image/svg+xml">
         <link rel="stylesheet" href="<?= e(asset('css/app.css')) ?>">
-        <script>
-            try {
-                if (sessionStorage.getItem('nova.admin.entered') === '1' || matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                    document.documentElement.classList.add('nova-skip-admin-skeleton');
-                }
-            } catch (error) {}
-        </script>
+        <script>window.novaSkeletonStart = performance.now();</script>
         <?php render_alert_head(); ?>
     </head>
     <body class="min-h-screen bg-[linear-gradient(180deg,#eef6fb_0%,#f7fafc_40%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>" data-sw="<?= e(url('sw.js')) ?>" data-admin-alerts="<?= e(url('api/alerts.php')) ?>" data-orders-url="<?= e(url('admin/pedidos.php')) ?>">
@@ -171,19 +165,6 @@ function admin_footer(): void
                 adminIconClose?.classList.toggle('hidden', !open);
                 document.documentElement.classList.toggle('admin-menu-open', open);
             };
-            const adminSkeleton = document.querySelector('[data-admin-skeleton]');
-            if (adminSkeleton) {
-                const hideSkeleton = () => {
-                    adminSkeleton.classList.add('is-done');
-                    try { sessionStorage.setItem('nova.admin.entered', '1'); } catch (error) {}
-                    window.setTimeout(() => adminSkeleton.remove(), 420);
-                };
-                if (document.documentElement.classList.contains('nova-skip-admin-skeleton')) {
-                    adminSkeleton.remove();
-                } else {
-                    window.setTimeout(hideSkeleton, 700);
-                }
-            }
             if (adminMenuButton && adminMenu) {
                 adminMenuButton.addEventListener('click', () => {
                     setAdminMenu(!adminMenu.classList.contains('is-open'));
@@ -195,6 +176,7 @@ function admin_footer(): void
                 });
             }
         </script>
+        <script src="<?= e(asset('js/skeleton.js')) ?>" defer></script>
         <script src="<?= e(asset('js/alerts.js')) ?>" defer></script>
     </body>
     </html>

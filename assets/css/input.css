@@ -101,10 +101,46 @@ html.admin-menu-open {
   overflow: hidden;
 }
 
-.nova-skeleton-block {
+.nova-skeleton-block,
+.nova-img-veil {
   background: linear-gradient(90deg, #e4ebf1 0%, #f7fafc 45%, #e4ebf1 100%);
   background-size: 220% 100%;
   animation: nova-skeleton 1.15s ease-in-out infinite;
+}
+
+.nova-img-frame {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: top;
+}
+
+.nova-img-frame.is-wide {
+  display: block;
+  width: 100%;
+}
+
+.nova-img-frame.is-fill {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.nova-img-frame.is-fill > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nova-img-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
 }
 
 .nova-skeleton-frame {
@@ -137,7 +173,7 @@ html.nova-skip-admin-skeleton .admin-skeleton {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 420ms ease, visibility 420ms ease;
+  transition: opacity 420ms ease, visibility 0s linear 420ms;
 }
 
 @media (min-width: 1024px) {
@@ -171,13 +207,14 @@ html.nova-skip-admin-skeleton .admin-skeleton {
   background:
     radial-gradient(900px 420px at 100% 0%, #d7ecf8, transparent 55%),
     linear-gradient(180deg, #eef6fb 0%, #f7fafc 100%);
-  transition: opacity 420ms ease, visibility 420ms ease;
+  transition: opacity 280ms ease, visibility 0s linear 0s;
 }
 
 .nova-loader.is-done {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  transition: opacity 420ms ease, visibility 0s linear 420ms;
 }
 
 .nova-loader-card {
@@ -273,6 +310,7 @@ html.nova-skip-admin-skeleton .admin-skeleton {
   .nova-loader-mark,
   .nova-loader-bar,
   .nova-skeleton-block,
+  .nova-img-veil,
   .nova-loader,
   .admin-side,
   .admin-backdrop {

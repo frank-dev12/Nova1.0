@@ -19,13 +19,7 @@ $searchQuery = $searchQuery ?? '';
     <title><?= e($pageTitle) ?> · NØVA</title>
     <link rel="icon" href="<?= e(asset('favicon.svg')) ?>" type="image/svg+xml">
     <link rel="stylesheet" href="<?= e(asset('css/app.css')) ?>">
-    <script>
-        try {
-            if (sessionStorage.getItem('nova.entered') === '1' || matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.documentElement.classList.add('nova-skip-loader');
-            }
-        } catch (error) {}
-    </script>
+    <script>window.novaSkeletonStart = performance.now();</script>
     <?php render_alert_head(); ?>
 </head>
 <body class="min-h-screen bg-[radial-gradient(1100px_420px_at_8%_-10%,#ffffff,transparent_60%),radial-gradient(900px_500px_at_100%_0%,#d7ecf8,transparent_55%),linear-gradient(180deg,#eef6fb_0%,#f5f8fb_42%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>" data-admin="<?= e(url('admin/login.php')) ?>" data-sw="<?= e(url('sw.js')) ?>">
