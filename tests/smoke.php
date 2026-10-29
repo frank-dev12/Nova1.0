@@ -66,8 +66,19 @@ try {
         }
     }
     check(is_array($stored) && ($stored['total'] ?? 0) === 89, 'stored order');
+    check(preg_match('/^NOVA-\d{6}$/', (string) ($stored['code'] ?? '')) === 1, 'order code');
+    check(($stored['status'] ?? '') === 'pendiente', 'order starts pending');
+    check(str_contains($customerOrder['whatsapp'], rawurlencode('Código: ' . $stored['code'])) || str_contains(urldecode($customerOrder['whatsapp']), $stored['code']), 'whatsapp includes code');
     check(str_contains(order_summary($stored), 'Polo Essential'), 'order summary');
+    check(orders_today_count() >= 1, 'today orders');
     order_mark_read((string) $stored['id']);
+    $marked = null;
+    foreach (orders_all() as $order) {
+        if (($order['id'] ?? '') === $stored['id']) {
+            $marked = $order;
+        }
+    }
+    check(is_array($marked) && order_status($marked) === 'atendido', 'order marked attended');
     check(orders_unread_count() === $before, 'order marked read');
 } finally {
     file_put_contents(orders_path(), $ordersBackup);

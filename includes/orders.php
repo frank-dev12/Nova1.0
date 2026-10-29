@@ -59,6 +59,53 @@ function orders_unread_count(): int
     return count(array_filter(orders_bucket(), static fn (array $order): bool => empty($order['read'])));
 }
 
+function order_next_code(): string
+{
+    $max = 0;
+    foreach (orders_bucket() as $order) {
+        if (preg_match('/^NOVA-(\d+)$/', (string) ($order['code'] ?? ''), $match) === 1) {
+            $max = max($max, (int) $match[1]);
+        }
+    }
+
+    return sprintf('NOVA-%06d', $max + 1);
+}
+
+function order_status(array $order): string
+{
+    $status = (string) ($order['status'] ?? '');
+    if ($status === 'atendido' || !empty($order['read'])) {
+        return 'atendido';
+    }
+
+    return 'pendiente';
+}
+
+function orders_today(): array
+{
+    $day = (new DateTimeImmutable('now', new DateTimeZone('America/Lima')))->format('Y-m-d');
+
+    return array_values(array_filter(
+        orders_all(),
+        static fn (array $order): bool => str_starts_with((string) ($order['created_at'] ?? ''), $day)
+    ));
+}
+
+function orders_today_count(): int
+{
+    return count(orders_today());
+}
+
+function orders_today_total(): int
+{
+    $total = 0;
+    foreach (orders_today() as $order) {
+        $total += (int) ($order['total'] ?? 0);
+    }
+
+    return $total;
+}
+
 function order_summary(array $order): string
 {
     $items = [];
@@ -84,16 +131,18 @@ function order_summary(array $order): string
     return $text;
 }
 
-function order_create(string $name, string $phone, array $lines, int $total): string
+function order_create(string $name, string $phone, array $lines, int $total, string $code): string
 {
     $items = &orders_bucket();
     $id = bin2hex(random_bytes(8));
     $items[] = [
         'id' => $id,
+        'code' => $code,
         'name' => $name,
         'phone' => $phone,
         'lines' => array_values($lines),
         'total' => $total,
+        'status' => 'pendiente',
         'read' => false,
         'created_at' => lima_now(),
     ];
@@ -108,6 +157,7 @@ function order_mark_read(string $id): void
     foreach ($items as $index => $order) {
         if (($order['id'] ?? '') === $id) {
             $items[$index]['read'] = true;
+            $items[$index]['status'] = 'atendido';
             orders_save();
             return;
         }
@@ -144,17 +194,19 @@ function order_place(string $name, string $phone): array
         return ['ok' => false, 'message' => 'El carrito está vacío.'];
     }
 
-    $text = cart_whatsapp_text($name, $phone);
     $alert = !admin_logged_in();
+    $code = $alert ? order_next_code() : '';
+    $text = cart_whatsapp_text($name, $phone, $code);
     if ($alert) {
-        order_create($name, $phone, $lines, cart_total());
+        order_create($name, $phone, $lines, cart_total(), $code);
         cart_clear();
     }
 
     return [
         'ok' => true,
         'alert' => $alert,
-        'message' => $alert ? 'Pedido enviado al panel.' : 'El pedido de un administrador no avisa al panel.',
+        'code' => $code,
+        'message' => $alert ? 'Pedido registrado. Se abre WhatsApp.' : 'El pedido de un administrador no avisa al panel.',
         'whatsapp' => whatsapp_link($text),
     ];
 }

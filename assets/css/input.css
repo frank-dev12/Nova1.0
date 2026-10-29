@@ -101,6 +101,67 @@ html.admin-menu-open {
   overflow: hidden;
 }
 
+.nova-skeleton-block {
+  background: linear-gradient(90deg, #e4ebf1 0%, #f7fafc 45%, #e4ebf1 100%);
+  background-size: 220% 100%;
+  animation: nova-skeleton 1.15s ease-in-out infinite;
+}
+
+.nova-skeleton-frame {
+  width: min(72rem, calc(100% - 2rem));
+}
+
+.admin-skeleton {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(180deg, #eef6fb 0%, #f7fafc 40%, #e7f2fa 100%);
+}
+
+.admin-skeleton-side {
+  display: none;
+}
+
+.admin-skeleton-main {
+  min-width: 0;
+}
+
+html.nova-skip-admin-skeleton .admin-skeleton {
+  display: none;
+}
+
+.admin-skeleton.is-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 420ms ease, visibility 420ms ease;
+}
+
+@media (min-width: 1024px) {
+  .admin-skeleton {
+    grid-template-columns: 340px 1fr;
+  }
+
+  .admin-skeleton-side {
+    display: block;
+    min-height: 100%;
+    border-radius: 28px;
+  }
+}
+
+@keyframes nova-skeleton {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
 .nova-loader {
   position: fixed;
   inset: 0;
@@ -211,6 +272,7 @@ html.admin-menu-open {
   .carousel.is-ready > .hero-slide,
   .nova-loader-mark,
   .nova-loader-bar,
+  .nova-skeleton-block,
   .nova-loader,
   .admin-side,
   .admin-backdrop {

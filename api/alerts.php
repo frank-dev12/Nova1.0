@@ -23,6 +23,8 @@ $orders = [];
 foreach (array_slice(orders_unread(), 0, 20) as $order) {
     $orders[] = [
         'id' => (string) ($order['id'] ?? ''),
+        'code' => (string) ($order['code'] ?? ''),
+        'total_label' => money((int) ($order['total'] ?? 0)),
         'summary' => order_summary($order),
         'created_at' => (string) ($order['created_at'] ?? ''),
     ];
@@ -31,5 +33,7 @@ foreach (array_slice(orders_unread(), 0, 20) as $order) {
 echo json_encode([
     'ok' => true,
     'unread' => orders_unread_count(),
+    'today_count' => orders_today_count(),
+    'today_total' => money(orders_today_total()),
     'orders' => $orders,
 ], JSON_UNESCAPED_UNICODE);

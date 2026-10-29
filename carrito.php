@@ -103,7 +103,7 @@ require __DIR__ . '/includes/header.php';
                     <span>Subtotal</span>
                     <span class="font-semibold"><?= e(money($total)) ?></span>
                 </div>
-                <p class="mt-3 text-xs leading-relaxed text-slate-500">Al terminar, el pedido abre WhatsApp<?php if (!admin_logged_in()): ?> y avisa al panel con un tono<?php endif; ?>. Coordinamos talla, color y envío a todo el Perú. Aún no hay pago en línea.</p>
+                <p class="mt-3 text-xs leading-relaxed text-slate-500">Al pedir por WhatsApp, el pedido se guarda primero<?php if (!admin_logged_in()): ?> y avisa al panel con un tono<?php endif; ?>. El mensaje lleva el código, la talla y el total. Coordinamos el envío a todo el Perú. Aún no hay pago en línea.</p>
                 <?php if (admin_logged_in()): ?>
                     <p class="mt-3 text-xs leading-relaxed text-slate-500">Estás como administrador: este pedido no genera alerta.</p>
                 <?php endif; ?>
@@ -118,7 +118,7 @@ require __DIR__ . '/includes/header.php';
                     </label>
                     <button type="submit" class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-nova text-sm font-semibold text-white transition hover:brightness-95">
                         <?= icon_whatsapp('h-4 w-4') ?>
-                        Terminar pedido
+                        Pedir por WhatsApp
                     </button>
                 </form>
                 <a href="<?= e(url('catalogo.php')) ?>" class="mt-3 inline-flex h-11 w-full items-center justify-center text-sm font-semibold text-slate-700">Seguir comprando</a>

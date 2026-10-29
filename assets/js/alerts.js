@@ -141,10 +141,30 @@
         });
     }
 
-    function showLive(summary) {
+    function applyStats(data) {
+        updateBadge(Number(data.unread || 0));
+        if (data.today_count != null) {
+            document.querySelectorAll('[data-orders-today]').forEach((node) => {
+                node.textContent = String(data.today_count);
+            });
+        }
+        if (data.today_total) {
+            document.querySelectorAll('[data-orders-revenue]').forEach((node) => {
+                node.textContent = data.today_total;
+            });
+        }
+    }
+
+    function showLive(order) {
         const live = document.querySelector('[data-alert-live]');
         if (!live) return;
-        live.textContent = summary;
+        const title = live.querySelector('[data-alert-live-title]');
+        const body = live.querySelector('[data-alert-live-body]');
+        if (title) title.textContent = 'Nuevo pedido recibido';
+        const code = order.code || '';
+        const total = order.total_label || '';
+        const line = [code, total].filter(Boolean).join(' · ') || order.summary || 'Un cliente terminó un pedido.';
+        if (body) body.textContent = line;
         live.classList.remove('hidden');
     }
 
@@ -171,7 +191,7 @@
                 if (order.id) seen.add(order.id);
             });
             sessionStorage.setItem('nova.heard', [...seen].join(','));
-            updateBadge(Number(data.unread || 0));
+            applyStats(data);
         } catch (error) {}
     }
 
@@ -192,16 +212,17 @@
                 });
                 if (!response.ok) return;
                 const data = await response.json();
-                updateBadge(Number(data.unread || 0));
+                applyStats(data);
                 const fresh = (Array.isArray(data.orders) ? data.orders : []).filter((order) => order.id && !seen.has(order.id));
                 if (fresh.length === 0) return;
                 fresh.forEach((order) => seen.add(order.id));
                 sessionStorage.setItem('nova.heard', [...seen].join(','));
                 playTone();
-                const title = fresh.length > 1 ? `${fresh.length} pedidos nuevos` : 'Nuevo pedido';
-                const body = fresh[0].summary || 'Un cliente terminó un pedido.';
-                showLive(body);
-                notify(title, body, fresh[0].id);
+                const newest = fresh[0];
+                const detail = [newest.code, newest.total_label].filter(Boolean).join(' · ') || newest.summary || 'Un cliente terminó un pedido.';
+                const title = fresh.length > 1 ? `${fresh.length} pedidos nuevos` : 'Nuevo pedido recibido';
+                showLive(newest);
+                notify(title, detail, newest.id);
             } catch (error) {
             } finally {
                 ticking = false;
@@ -263,6 +284,10 @@
             showGate();
             syncBanners();
         });
+    });
+
+    document.querySelector('[data-alert-live-close]')?.addEventListener('click', () => {
+        document.querySelector('[data-alert-live]')?.classList.add('hidden');
     });
 
     document.addEventListener('pointerdown', () => {

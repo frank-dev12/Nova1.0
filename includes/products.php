@@ -128,7 +128,7 @@ function products_related(array $product, int $limit = 4): array
     return array_slice($related, 0, $limit);
 }
 
-function products_query(string $q = '', string $category = '', string $sort = 'destacados'): array
+function products_query(string $q = '', string $category = '', string $sort = 'destacados', string $size = ''): array
 {
     $q = trim($q);
     $needle = mb_strtolower($q);
@@ -138,6 +138,14 @@ function products_query(string $q = '', string $category = '', string $sort = 'd
         $products = array_values(array_filter(
             $products,
             static fn (array $product): bool => $product['category'] === $category
+        ));
+    }
+
+    $size = trim($size);
+    if ($size !== '') {
+        $products = array_values(array_filter(
+            $products,
+            static fn (array $product): bool => in_array($size, $product['sizes'], true)
         ));
     }
 

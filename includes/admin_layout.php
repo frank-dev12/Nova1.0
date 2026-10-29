@@ -69,11 +69,41 @@ function admin_header(string $title, string $active): void
         <title><?= e($title) ?> · Panel NØVA</title>
         <link rel="icon" href="<?= e(asset('favicon.svg')) ?>" type="image/svg+xml">
         <link rel="stylesheet" href="<?= e(asset('css/app.css')) ?>">
+        <script>
+            try {
+                if (sessionStorage.getItem('nova.admin.entered') === '1' || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    document.documentElement.classList.add('nova-skip-admin-skeleton');
+                }
+            } catch (error) {}
+        </script>
         <?php render_alert_head(); ?>
     </head>
     <body class="min-h-screen bg-[linear-gradient(180deg,#eef6fb_0%,#f7fafc_40%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>" data-sw="<?= e(url('sw.js')) ?>" data-admin-alerts="<?= e(url('api/alerts.php')) ?>" data-orders-url="<?= e(url('admin/pedidos.php')) ?>">
         <?php render_alert_gate(); ?>
-        <a data-alert-live href="<?= e(url('admin/pedidos.php')) ?>" class="fixed bottom-5 left-1/2 z-[70] hidden max-w-[90vw] -translate-x-1/2 truncate rounded-full bg-ink px-4 py-2.5 text-sm text-white shadow-lg"></a>
+        <div class="admin-skeleton" data-admin-skeleton aria-hidden="true">
+            <div class="admin-skeleton-side nova-skeleton-block"></div>
+            <div class="admin-skeleton-main">
+                <div class="nova-skeleton-block h-28"></div>
+                <div class="mt-4 grid grid-cols-3 gap-3">
+                    <div class="nova-skeleton-block h-24"></div>
+                    <div class="nova-skeleton-block h-24"></div>
+                    <div class="nova-skeleton-block h-24"></div>
+                </div>
+                <div class="nova-skeleton-block mt-4 h-48"></div>
+            </div>
+        </div>
+        <div data-alert-live class="fixed bottom-5 right-4 z-[70] hidden w-[min(100%-2rem,22rem)] rounded-3xl bg-white p-4 text-ink shadow-[0_20px_50px_-24px_rgba(15,23,42,0.65)]">
+            <div class="flex items-start gap-3">
+                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-rose-50 text-rose-500"><?= icon('bell', 'h-5 w-5') ?></span>
+                <div class="min-w-0 flex-1">
+                    <p data-alert-live-title class="font-semibold">Nuevo pedido recibido</p>
+                    <p data-alert-live-body class="mt-0.5 text-sm text-slate-500"></p>
+                    <p class="mt-1 text-xs text-slate-400">Hace unos segundos</p>
+                </div>
+                <button type="button" data-alert-live-close class="grid h-8 w-8 place-items-center rounded-full text-slate-400 hover:bg-slate-100" aria-label="Cerrar aviso"><?= icon('x', 'h-4 w-4') ?></button>
+            </div>
+            <a href="<?= e(url('admin/pedidos.php')) ?>" class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-nova">Ver pedido <?= icon('arrow-right', 'h-4 w-4') ?></a>
+        </div>
         <button type="button" class="admin-backdrop" data-admin-backdrop aria-label="Cerrar menú"></button>
         <div class="lg:grid lg:min-h-screen lg:grid-cols-[340px_1fr]">
             <div class="mx-4 mt-4 flex h-14 items-center gap-2 self-start rounded-2xl border border-white/80 bg-white/70 px-3 text-ink shadow-[0_10px_28px_-14px_rgba(20,20,20,0.45),0_0_0_1px_rgba(20,20,20,0.04)] backdrop-blur-md lg:hidden">
@@ -141,6 +171,19 @@ function admin_footer(): void
                 adminIconClose?.classList.toggle('hidden', !open);
                 document.documentElement.classList.toggle('admin-menu-open', open);
             };
+            const adminSkeleton = document.querySelector('[data-admin-skeleton]');
+            if (adminSkeleton) {
+                const hideSkeleton = () => {
+                    adminSkeleton.classList.add('is-done');
+                    try { sessionStorage.setItem('nova.admin.entered', '1'); } catch (error) {}
+                    window.setTimeout(() => adminSkeleton.remove(), 420);
+                };
+                if (document.documentElement.classList.contains('nova-skip-admin-skeleton')) {
+                    adminSkeleton.remove();
+                } else {
+                    window.setTimeout(hideSkeleton, 700);
+                }
+            }
             if (adminMenuButton && adminMenu) {
                 adminMenuButton.addEventListener('click', () => {
                     setAdminMenu(!adminMenu.classList.contains('is-open'));

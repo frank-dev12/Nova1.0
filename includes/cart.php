@@ -181,9 +181,12 @@ function cart_handle(array $post): array
     };
 }
 
-function cart_whatsapp_text(string $name = '', string $phone = ''): string
+function cart_whatsapp_text(string $name = '', string $phone = '', string $code = ''): string
 {
-    $parts = ['Hola NØVA, quiero hacer este pedido:'];
+    $parts = ['Hola NØVA, quiero hacer un pedido.'];
+    if ($code !== '') {
+        $parts[] = 'Código: ' . $code;
+    }
     if ($name !== '') {
         $parts[] = 'Nombre: ' . $name;
     }
@@ -195,7 +198,7 @@ function cart_whatsapp_text(string $name = '', string $phone = ''): string
             continue;
         }
         $parts[] = sprintf(
-            '- %s (%s / %s) x%d — %s',
+            "- %s\n  Color: %s | Talla: %s | Cantidad: %d | %s",
             $line['name'],
             $line['color'],
             $line['size'],

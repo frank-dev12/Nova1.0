@@ -31,9 +31,15 @@ $searchQuery = $searchQuery ?? '';
 <body class="min-h-screen bg-[radial-gradient(1100px_420px_at_8%_-10%,#ffffff,transparent_60%),radial-gradient(900px_500px_at_100%_0%,#d7ecf8,transparent_55%),linear-gradient(180deg,#eef6fb_0%,#f5f8fb_42%,#e7f2fa_100%)] font-sans text-ink antialiased" data-base="<?= e(base_path()) ?>" data-admin="<?= e(url('admin/login.php')) ?>" data-sw="<?= e(url('sw.js')) ?>">
     <?php render_alert_gate(); ?>
     <div class="nova-loader" data-loader role="status" aria-live="polite" aria-label="Cargando NØVA">
-        <div class="nova-loader-card">
-            <p class="nova-loader-mark">NØVA</p>
-            <span class="nova-loader-track" aria-hidden="true"><span class="nova-loader-bar"></span></span>
+        <div class="nova-skeleton-frame">
+            <div class="nova-skeleton-block h-14 w-full rounded-[22px]"></div>
+            <div class="nova-skeleton-block mt-4 h-56 w-full rounded-[28px]"></div>
+            <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <div class="nova-skeleton-block h-44 rounded-[22px]"></div>
+                <div class="nova-skeleton-block h-44 rounded-[22px]"></div>
+                <div class="nova-skeleton-block hidden h-44 rounded-[22px] sm:block"></div>
+                <div class="nova-skeleton-block hidden h-44 rounded-[22px] sm:block"></div>
+            </div>
         </div>
     </div>
     <a href="#contenido" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-white focus:px-4 focus:py-2">Saltar al contenido</a>
