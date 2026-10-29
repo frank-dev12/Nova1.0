@@ -76,10 +76,10 @@ function admin_header(string $title, string $active): void
         <a data-alert-live href="<?= e(url('admin/pedidos.php')) ?>" class="fixed bottom-5 left-1/2 z-[70] hidden max-w-[90vw] -translate-x-1/2 truncate rounded-full bg-ink px-4 py-2.5 text-sm text-white shadow-lg"></a>
         <button type="button" class="admin-backdrop" data-admin-backdrop aria-label="Cerrar menú"></button>
         <div class="lg:grid lg:min-h-screen lg:grid-cols-[340px_1fr]">
-            <div class="mx-4 mt-4 flex h-14 items-center gap-2 self-start rounded-2xl bg-[#2a2a2a] px-3 text-white lg:hidden">
+            <div class="mx-4 mt-4 flex h-14 items-center gap-2 self-start rounded-2xl border border-white/80 bg-white/70 px-3 text-ink shadow-[0_10px_28px_-14px_rgba(20,20,20,0.45),0_0_0_1px_rgba(20,20,20,0.04)] backdrop-blur-md lg:hidden">
                 <a href="<?= e(url('admin/index.php')) ?>" class="px-1 text-lg font-black tracking-[-0.06em]">NØVA</a>
-                <span class="min-w-0 truncate text-sm text-white/60"><?= e($title) ?></span>
-                <button type="button" class="ml-auto grid h-9 w-9 shrink-0 place-items-center rounded-full text-white hover:bg-white/10" data-admin-menu-toggle aria-expanded="false" aria-controls="menu-panel">
+                <span class="min-w-0 truncate text-sm text-slate-500"><?= e($title) ?></span>
+                <button type="button" class="ml-auto grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink hover:bg-black/5" data-admin-menu-toggle aria-expanded="false" aria-controls="menu-panel">
                     <span class="sr-only">Abrir menú del panel</span>
                     <span data-admin-icon-open><?= icon('menu', 'h-5 w-5') ?></span>
                     <span data-admin-icon-close class="hidden"><?= icon('x', 'h-5 w-5') ?></span>
